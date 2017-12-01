@@ -18,6 +18,7 @@ const ResponseHandle = require('./middlewares/resultCapture');
 
 //服务器异常 捕获
 app.use(async(ctx,next)=>{
+	ctx.state.isMobile = /(iPhone|iPod|Android|ios)/i.test(ctx.headers["user-agent"]);
 	try {
 		await next()
 		if (ctx.status === 404) 
@@ -45,7 +46,6 @@ app.use(bodyParser());
 
 if(process.env.NODE_ENV === 'development'){
 	app.use(( ctx, next ) => {
-		ctx.state.isMobile = /(iPhone|iPod|Android|ios)/i.test(ctx.headers["user-agent"]);
 		if(ctx.request.url === '/'){
 			console.log("正在编译scss文件...");
 			const result = sass.renderSync({
