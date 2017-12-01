@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= post.title %></title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="keywords" content="前端">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+		<link rel="stylesheet" href="/styles/layout.css">
+		<style>
+			.content {padding:20px;box-sizing:border-box;width:100%;overflow-x:auto;}
+			@media (max-width:800px){.content {padding:10px;}.content table {width:100% !important;}}
+		</style>
+	</head>
+	<body>
+		<div class="g">
+			<%- include nav.ejs %>
+			<div class="g-con">
+				<article class="u-art">
+					<header class="tc">
+						<h2 class="title"><%= post.title %></h2>
+						<p>发表于<%= post.created_at %></p>
+					</header>
+					<div class="content">
+						<%- post.content %>
+					</div>
+				</article>	
+			</div>
+		
+		</div>
+		<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+		<script src="/scripts/date-timer.js"></script>
+		<script>
+			$(function(){
+				var dateTimer = new DateTimer({
+					url:'/posts/get-dates',
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "name": "koa-blog",
+  "version": "2.0.0",
+  "description": "koa-blog",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "NODE_ENV=development supervisor app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CaraXiaoKe/koa-blog.git"
+  },
+  "author": "CaraXiaoKe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CaraXiaoKe/koa-blog/issues"
+  },
+  "homepage": "https://github.com/CaraXiaoKe/koa-blog#readme",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "ejs": "^2.5.7",
+    "ioredis": "^3.2.1",
+    "koa": "^2.3.0",
+    "koa-bodyparser": "^3.2.0",
+    "koa-multer": "^1.0.2",
+    "koa-router": "^7.2.1",
+    "koa-static": "^4.0.1",
+    "koa-views": "^6.0.2",
+    "moment": "^2.19.2",
+    "mongoose": "^4.13.0",
+    "qiniu": "~6.1.13"
+  }
+}
