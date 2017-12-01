@@ -11,8 +11,11 @@ Vue.use(Components)
 Vue.use(http)
 router.beforeEach((to,from,next)=>{
     if(to.name!=='login'){
-        let _id = store.get('user')._id;
-        Vue.axios().get(`/api/v1/admin_users/${_id}`);
+        let user = store.get('user');
+        if(!user){
+            return next('/login');
+        };
+        Vue.axios().get(`/api/v1/admin_users/${user._id}`);
     };
     next();
 
