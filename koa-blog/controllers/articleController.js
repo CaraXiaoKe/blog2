@@ -22,7 +22,7 @@ exports.create = async (ctx) => {
 	})	
 }
 exports.getAll = async (ctx) => {
-	let {conditions={},limit,filterBy,sortedBy,page} = ctx.request.query;
+	let {conditions={},limit,filterBy,sortedBy={_id:-1},page} = ctx.request.query;
 	await ctx.Promise((resolve,reject)=>{
 		if(!limit||!page){
 			articleModel.find(conditions).sort(sortedBy).select(filterBy).exec((err,collections)=>{

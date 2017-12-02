@@ -30,6 +30,11 @@ export default new Router({
                     path:'article/:id/edit',
                     name:'article/edit',
                     component:() => import('@/components/article/edit')
+                },
+                {
+                    path:'/register',
+                    name:'register',
+                    component:()=>import('@/components/register')
                 }
             ]
         },

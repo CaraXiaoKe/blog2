@@ -32,7 +32,7 @@
               label="操作"
               width="100">
               <template slot-scope="scope">
-                <router-link :to="{name:'article/edit',params:{id:scope.row._id}}" target="_blank">
+                <router-link :to="{name:'article/edit',params:{id:scope.row._id}}">
                     <el-button type="text" size="small">编辑</el-button>
                 </router-link>
               </template>

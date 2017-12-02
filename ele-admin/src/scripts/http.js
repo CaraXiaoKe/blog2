@@ -11,9 +11,20 @@ axios.interceptors.response.use(function (response) {
     if(loadingInstance&&loadingInstance.visible){
        loadingInstance.close();
     };
+    if(Message.M){
+        Message.M = false;
+        Message({
+            showClose: true,
+            type:"success",
+            message: response.data.msg,
+        });
+    }
     return response.data;
 
 }, function (error) {
+    if(Message.M){
+        Message.M = false;
+    };
     if(loadingInstance&&loadingInstance.visible){
        loadingInstance.close();
     };
@@ -41,6 +52,9 @@ const install = function(Vue){
     Vue.axios = Vue.prototype.$axios = function(op={}){
         if(op.L){
            loadingInstance = Loading.service();
+        };
+        if(op.M){
+            Message.M = true;
         };
         axios.defaults.headers.common['Authorization'] = store.get('token');
         return axios;

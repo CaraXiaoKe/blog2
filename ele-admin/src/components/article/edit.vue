@@ -67,7 +67,7 @@
                 </el-upload>
             </el-form-item>
             <el-form-item label="">
-                <el-button type="primary" @click="submit">创建文章</el-button>
+                <el-button type="primary" @click="submit">修改文章</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -144,8 +144,8 @@
                 this.form.image = res.url;
             },
             submit(){
-                this.$axios({L:true}).post('/api/v1/articles/'+this._id,this.form).then(res=>{
-                    // this.$router.push('/')
+                this.$axios({L:true,M:true}).post('/api/v1/articles/'+this._id,this.form).then(res=>{
+                    this.$router.push('/')
                 })
             }
         },

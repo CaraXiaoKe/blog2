@@ -39,8 +39,8 @@
 									<a class="left"><%= post.user_name %> 发表于 <%= post.created_at %></a>
 									<a class="right">
 									<% if(config_cate[post.cate]&&config_cate[post.cate].sub){ %>
-										分类: <%= config_cate[post.cate].name %>-<%= config_cate[post.cate].sub[post.sub_cate] %>
-									<% } %>
+										<span class="type">分类: <%= config_cate[post.cate].name %>-<%= config_cate[post.cate].sub[post.sub_cate] %>
+									<% } %></span>
 									阅读数<%= post.views %></a>
 								</div>
 							</article>

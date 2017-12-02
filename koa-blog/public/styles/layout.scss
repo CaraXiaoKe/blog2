@@ -144,7 +144,8 @@ a {
 	}
 	.title {
 		font-size:24px;
-		line-height:2.5;
+		line-height:1.2;
+		padding:10px 0;
 	}
 	.wrap-img {
 		position:absolute;
@@ -272,6 +273,9 @@ a {
 @media (max-width:760px) {
 	.g {
 		padding-left:0;
+	}
+	.type {
+		display:none;
 	}
 	.m-nav {
 		position:relative;

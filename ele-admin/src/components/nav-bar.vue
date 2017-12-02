@@ -18,6 +18,10 @@
                     <i class="el-icon-plus"></i>
                     <span slot="title">文章创建</span>
                 </el-menu-item>
+                <el-menu-item index="/register" v-if="admin_name=='dpd'">
+                    <i class="el-icon-plus"></i>
+                    <span slot="title">添加账号</span>
+                </el-menu-item>
             </el-menu>
 
         </el-aside>
@@ -39,7 +43,8 @@
         data(){
             return {
                 isCollapse:false,
-                title:"文章列表"
+                title:"文章列表",
+                admin_name:store.get('user').admin_name
             }
         },
         computed:{

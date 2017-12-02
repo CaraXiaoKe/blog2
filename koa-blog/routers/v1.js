@@ -10,16 +10,16 @@ const dict = require('../config/dict');
 const router = new Router({
 	prefix:'/v1'
 });
-router.post('/register',loginController.register); 
+router.post('/register',can(),loginController.register); 
 router.post('/login',loginController.login);
 router.get('/admin_users/:id',can(),loginController.getUserInfo);
 
 router.post('/articles',can(),articleController.create);
-router.post('/articles/:id',articleController.updateOne);
+router.post('/articles/:id',can(),articleController.updateOne);
 router.get('/articles',articleController.getAll);
 router.get('/articles/:id',articleController.getOne);
 router.get('/dict/:key',async (ctx) =>{
 	ctx.body = dict[ctx.params.key];
 });
-router.post('/upload',...qiniu);
+router.post('/upload',can(),...qiniu);
 module.exports = router;

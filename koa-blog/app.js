@@ -43,7 +43,6 @@ app.use(views(path.join(__dirname, './views'), {
 }))
 
 app.use(bodyParser());
-
 if(process.env.NODE_ENV === 'development'){
 	app.use(( ctx, next ) => {
 		if(ctx.request.url === '/'){

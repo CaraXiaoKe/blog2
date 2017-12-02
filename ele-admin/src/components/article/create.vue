@@ -135,7 +135,6 @@
             this.$axios().get('/api/v1/dict/cate').then(res=>{
                 this.cates = Object.freeze(res);
             });
-            this.$refs.editor.insertHTML('<h1>ddd</h1>')
         },
         methods: {
             handleClose(tag){

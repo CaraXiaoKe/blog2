@@ -44,17 +44,6 @@
                     store.set('token',res.token);
                     this.$router.push({name:'article'})
                 })
-            },
-            logIn1(){
-                this.$axios().post('/api/v1/register',{
-                    admin_name:'dpd',
-                    amind_mobile:'18910847416',
-                    admin_password:'4164110dpd'
-                }).then(res=>{
-                    store.set('user',res.data);
-                    store.set('token',res.token);
-                    this.$router.push({name:'article'})
-                })
             }
         },
         beforeDestroy(){
