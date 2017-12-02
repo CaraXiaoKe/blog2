@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var {mongodb} = require('../config/setting');
-var DB_URL = `mongodb:\/\/${mongodb.host}:${mongodb.port}/${mongodb.database}`;
+var DB_URL = `mongodb:\/\/${mongodb.username}:${mongodb.password}@${mongodb.host}:${mongodb.port}/${mongodb.database}`;
 mongoose.connect(DB_URL,{useMongoClient: true});
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
