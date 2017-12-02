@@ -32,6 +32,12 @@ export default new Router({
                     component:() => import('@/components/article/edit')
                 }
             ]
+        },
+        {
+            path: '*',
+            redirect: {
+                name: 'article'
+            }
         }
     ]
 })

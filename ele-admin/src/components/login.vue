@@ -12,7 +12,7 @@
                     <template slot="prepend">密码</template>
                 </el-input>
             </el-form-item>
-            <el-button @click="logIn">登录</el-button>
+            <el-button @click="logIn1">登录</el-button>
         </el-form>
     </el-row>
 </template>
