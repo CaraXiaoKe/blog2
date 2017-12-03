@@ -141,7 +141,8 @@
                     this.$refs.editor.insertHTML(draft.content);
                     this.$notify({
                         message: '草稿读取成功',
-                        type:"success"
+                        type:"success",
+                        duration:1500,
                     });
                 };
                 this.draftSave();
@@ -157,7 +158,8 @@
                     store.set('draft',this.form);
                     this.$notify({
                         message: '草稿自动保存成功',
-                        type:"success"
+                        type:"success",
+                        duration:1500
                     });
                 },30000);
             },
@@ -191,11 +193,12 @@
                         })
                     }
                 })
-            },
-            beforeDestoy(){
-                clearInterval(this.interval);
-                this.interval = null;
             }
+        },
+        beforeDestroy(){
+            this.$notify.close();
+            clearInterval(this.interval);
+            this.interval = null;
         }
     }
 </script>
