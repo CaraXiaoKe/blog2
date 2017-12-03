@@ -76,7 +76,6 @@
 </template>
 <script>
     import editorComponent from '../partials/editor.vue'
-    import pageVisibility from '@/scripts/pageVisibility.js'
     export default {
         components: {
             editorComponent
@@ -147,17 +146,7 @@
                         duration:1500,
                     });
                 };
-                let _this = this;
                 this.draftSave();
-                pageVisibility.visibilitychange(function(){
-                   if(!/\/article\/create/.test(location.href)) return;
-                   if(!this.isFirst){this.isFirst = true;return;}
-                   if(this.visibilityState === 'visible'){
-                        _this.draftSave();
-                   }else{
-                        clearInterval(_this.interval);
-                   }
-                });
                 this.$nextTick(()=>{
                     this.isInt = true;
                 })
@@ -166,7 +155,6 @@
         },
         methods: {
             draftSave(){
-                clearInterval(this.interval);
                 this.interval =  setInterval(()=>{
                     store.set('draft',this.form);
                     this.$notify({
