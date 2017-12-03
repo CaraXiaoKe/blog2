@@ -152,7 +152,6 @@
                 pageVisibility.visibilitychange(function(){
                    if(!/\/article\/create/.test(location.href)) return;
                    if(!this.isFirst){this.isFirst = true;return;}
-                   clearInterval(_this.interval);
                    if(this.visibilityState === 'visible'){
                         _this.draftSave();
                    }else{
@@ -167,6 +166,7 @@
         },
         methods: {
             draftSave(){
+                clearInterval(this.interval);
                 this.interval =  setInterval(()=>{
                     store.set('draft',this.form);
                     this.$notify({
