@@ -15,9 +15,9 @@ export default {
     },
     clear(key){
         if(key!==undefined){
-            localStorage().removeItem(key)
+            localStorage.removeItem(key)
         }else{
-            localStorage().clear()
+            localStorage.clear()
         }
     }
 }

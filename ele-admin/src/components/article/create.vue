@@ -100,6 +100,7 @@
                     image:''
                 },
                 cates:{},
+                isInt:false,
                 cate_subs:{},
                 token:store.get('token'),
                 rules:{
@@ -127,16 +128,39 @@
         },
         watch:{
             "form.cate"(cate){
-                this.form.sub_cate = "";
+                if(this.isInt) this.form.sub_cate = "";//解决初始化问题
                 this.cate_subs = this.cates[cate].sub;
             }
         },
         mounted(){
             this.$axios().get('/api/v1/dict/cate').then(res=>{
                 this.cates = Object.freeze(res);
+                let draft = store.get('draft');
+                if(draft){
+                    this.form = draft;
+                    this.$refs.editor.insertHTML(draft.content);
+                    this.$notify({
+                        message: '草稿读取成功',
+                        type:"success"
+                    });
+                };
+                this.draftSave();
+                this.$nextTick(()=>{
+                    this.isInt = true;
+                })
             });
+
         },
         methods: {
+            draftSave(){
+                this.interval =  setInterval(()=>{
+                    store.set('draft',this.form);
+                    this.$notify({
+                        message: '草稿自动保存成功',
+                        type:"success"
+                    });
+                },30000);
+            },
             handleClose(tag){
                this.form.tags.splice(this.form.tags.indexOf(tag), 1);
             },
@@ -159,14 +183,20 @@
             submit(){
                 this.$refs.form.validate((valid)=>{
                     if(valid){
+                        clearInterval(this.interval);
+                        this.interval = null;
                         this.$axios({L:true}).post('/api/v1/articles',this.form).then(res=>{
-                            this.$router.push('/')
+                            this.$router.push('/');
+                            store.clear('draft');
                         })
                     }
                 })
-
+            },
+            beforeDestoy(){
+                clearInterval(this.interval);
+                this.interval = null;
             }
-        },
+        }
     }
 </script>
 <style lang="scss">

@@ -22,7 +22,9 @@ import {
     Table,
     TableColumn,
     Pagination,
-    Row
+    Row,
+    Notification,
+    Message
 } from 'element-ui'
 const components = [
     Container,
@@ -58,6 +60,8 @@ const install = function(Vue,opts={}){
     const ELEMENT = {};
     ELEMENT.size = opts.size || '';
     Vue.prototype.$ELEMENT = ELEMENT;
+    Vue.prototype.$message = Message;
+    Vue.prototype.$notify  = Notification;
 }
 
 export default {
