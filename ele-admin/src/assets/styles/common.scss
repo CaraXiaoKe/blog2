@@ -39,8 +39,6 @@ time, mark, audio, video {
     margin: 0;
     padding: 0;
     border: 0;
-    font-size: 100%;
-    font: inherit;
 }
 html,body,#app{
     width:100%;
@@ -79,6 +77,10 @@ blockquote:before, blockquote:after,q:before, q:after {
 }
 .mr10 {
     margin-right: 5px;
+}
+pre {
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 table {
     border-collapse: collapse;
