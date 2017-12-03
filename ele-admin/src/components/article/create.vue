@@ -76,6 +76,7 @@
 </template>
 <script>
     import editorComponent from '../partials/editor.vue'
+    import pageVisibility from '@/scripts/pageVisibility.js'
     export default {
         components: {
             editorComponent
@@ -122,7 +123,8 @@
                     content:[
                         {required:true,message:"请填写文章内容"}
                     ]
-                }
+                },
+                isCreated:true
 
             }
         },
@@ -145,7 +147,18 @@
                         duration:1500,
                     });
                 };
+                let _this = this;
                 this.draftSave();
+                pageVisibility.visibilitychange(function(){
+                   if(!/\/article\/create/.test(location.href)) return;
+                   if(!this.isFirst){this.isFirst = true;return;}
+                   clearInterval(_this.interval);
+                   if(this.visibilityState === 'visible'){
+                        _this.draftSave();
+                   }else{
+                        clearInterval(_this.interval);
+                   }
+                });
                 this.$nextTick(()=>{
                     this.isInt = true;
                 })
@@ -161,7 +174,7 @@
                         type:"success",
                         duration:1500
                     });
-                },30000);
+                },15000);
             },
             handleClose(tag){
                this.form.tags.splice(this.form.tags.indexOf(tag), 1);
