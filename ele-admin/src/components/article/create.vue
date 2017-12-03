@@ -162,7 +162,7 @@
                         type:"success",
                         duration:1500
                     });
-                },15000);
+                },30000);
             },
             handleClose(tag){
                this.form.tags.splice(this.form.tags.indexOf(tag), 1);
