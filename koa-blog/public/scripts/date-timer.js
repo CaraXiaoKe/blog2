@@ -42,7 +42,7 @@ DateTimer.prototype.init = function(){
             dataType:'JSON',
             data:{
                 start_time_at: ym + '-01',
-                end_time_at: ym + '-' + curDates,
+                end_time_at: ym + '-' + (curDates+1),
                 filterBy:'created_at'
             },
             success:function(res){
@@ -64,10 +64,11 @@ DateTimer.prototype.init = function(){
 DateTimer.prototype.getInnerHTML = function(ym){
     var curDates = this.getDates();//月天数
     var curDate = this.getDate();//月几号
+    var curYear = this.getFullYear();
     var innerHTML = "";
     for(var i=1; i <= curDates; i++){
         var ymd = ym + '-' + (i < 10 ? '0'+i : i);
-        if(i == curDate){  
+        if(i == curDate && curYear == new Date().getFullYear()){  
             if(this.exist[ym][ymd]){
                 innerHTML+='<div data-id='+ymd+' class="cur edate dateable">' + i + '</div>';
             }else{
@@ -135,7 +136,9 @@ DateTimer.prototype.getInitDay = function(){
 DateTimer.prototype.getDate = function(){
     return this.date.getDate();
 }
-
+DateTimer.prototype.getFullYear = function(){
+    return this.date.getFullYear();
+}
 //当前月份 1,2,3,4...
 DateTimer.prototype.getMonth = function(){
     return this.date.getMonth() + 1;

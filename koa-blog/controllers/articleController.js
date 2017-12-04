@@ -22,7 +22,16 @@ exports.create = async (ctx) => {
 	})	
 }
 exports.getAll = async (ctx) => {
-	let {conditions={},limit,filterBy,sortedBy={_id:-1},page} = ctx.request.query;
+	let {conditions={},limit,filterBy,sortedBy={_id:-1},page,start_time_at,end_time_at} = ctx.request.query;
+	if(start_time_at||end_time_at){
+		conditions.created_at = {};
+		if(start_time_at){
+			conditions.created_at.$gte = start_time_at;
+		};
+		if(end_time_at){
+			conditions.created_at.$lt = end_time_at;
+		};
+	};
 	await ctx.Promise((resolve,reject)=>{
 		if(!limit||!page){
 			articleModel.find(conditions).sort(sortedBy).select(filterBy).exec((err,collections)=>{
