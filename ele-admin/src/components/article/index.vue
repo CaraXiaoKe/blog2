@@ -58,7 +58,8 @@
                 total:0,
                 query:{
                     limit:10,
-                    page:1
+                    page:1,
+                    filterBy:"title user_name cate created_at reviews views"
                 }
             }
         },
