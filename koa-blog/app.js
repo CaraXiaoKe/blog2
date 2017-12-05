@@ -4,6 +4,7 @@ const app = new Koa();
 const sass = require('node-sass');
 const path = require('path');
 const fs = require('fs'); 
+const helmet = require('koa-helmet');
 
 const setting = require('./config/setting.js');
 const router = require('./routers/index.js');
@@ -31,7 +32,7 @@ app.use(async(ctx,next)=>{
 		console.error(err.stack+"\n");
   	}
 })
-
+app.use(helmet());
 app.use(static(
   	path.join( __dirname,  './public')
 ))
