@@ -111,15 +111,15 @@
             }
         },
         mounted(){
+            this._id = this.$route.params.id;
             this.$axios().get('/api/v1/dict/cate').then(res=>{
                 this.cates = Object.freeze(res);
-            });
-            this._id = this.$route.params.id;
-            this.$axios().get('/api/v1/articles/'+this._id).then(res=>{
-                this.form = res.data;
-                this.$refs.editor.insertHTML(res.data.content);
-                this.$nextTick(()=>{
-                    this.isInt = true;
+                this.$axios().get('/api/v1/articles/'+this._id).then(res=>{
+                    this.form = res.data;
+                    this.$refs.editor.insertHTML(res.data.content);
+                    this.$nextTick(()=>{
+                        this.isInt = true;
+                    });
                 });
             });
         },
