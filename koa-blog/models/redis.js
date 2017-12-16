@@ -20,4 +20,35 @@ redis._set = function(...arguments){
 	};
 	redis.set.apply(this,arguments);
 }
+redis._hgetall = async function(key,index){
+	let o = await redis.hgetall(key);
+	if(!index){
+		return o;
+	};
+	let value = o[index];
+	try{
+		value = JSON.parse(value);
+	}catch(err){}
+	return value;
+}
+redis._hmset = function(...arguments){
+	if(typeof arguments[2] === "object"){
+		arguments[2] = JSON.stringify(arguments[2]);
+	};
+	redis.hmset.apply(this,arguments);
+}
+redis.emptyHash = async function(key){
+	let keys = await redis.hkeys(key);
+	return await new Promise((resolve,reject)=>{
+		redis.pipeline(keys.map(item=>{
+			return ['hmset',key,item,''];
+		})).exec((err,results)=>{
+			if(!err){
+				resolve(results);
+			}else{
+				reject('清空'+key+"失败！")
+			}
+		});
+	});
+}
 module.exports = redis;

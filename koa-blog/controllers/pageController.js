@@ -1,4 +1,5 @@
 const articleModel = require('../models/articleModel');
+const redis = require('../models/redis');
 exports.getAll = async ( ctx ) => {
 	let {conditions={},limit=8,sortedBy={_id:-1},page=1} = ctx.request.query;
 	let res = await new Promise((resolve,reject)=>{
@@ -25,11 +26,18 @@ exports.getAll = async ( ctx ) => {
   	})
 }
 exports.getOne = async (ctx) => {
+	let article = await redis._hgetall('articles',ctx.params.id);
+	if(article){
+		return await ctx.render('article', {
+	    	post:article
+	  	});
+	};
 	let res = await new Promise((resolve,reject)=>{
 		articleModel.findById(ctx.params.id).exec((err,collection)=>{
 			if(err){
 				return reject(err);
 			};
+			redis._hmset('articles', ctx.params.id, collection);
 			return resolve({
 				msg:"ok",
 				data:collection
