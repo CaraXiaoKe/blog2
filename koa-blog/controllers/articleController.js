@@ -72,7 +72,7 @@ exports.getOne = async (ctx) => {
 		if(article){
 			return resolve({
 				msg:"ok",
-				data:collection
+				data:article
 			})
 		};
 		articleModel.findById(ctx.params.id).exec((err,collection)=>{
