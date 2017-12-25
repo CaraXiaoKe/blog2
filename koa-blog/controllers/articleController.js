@@ -68,13 +68,13 @@ exports.getAll = async (ctx) => {
 }
 exports.getOne = async (ctx) => {
 	let article = await redis._hgetall('articles',ctx.params.id);
-	if(article){
-		return resolve({
-			msg:"ok",
-			data:collection
-		})
-	};
 	await ctx.Promise((resolve,reject)=>{
+		if(article){
+			return resolve({
+				msg:"ok",
+				data:collection
+			})
+		};
 		articleModel.findById(ctx.params.id).exec((err,collection)=>{
 			if(err){
 				return reject(err);
