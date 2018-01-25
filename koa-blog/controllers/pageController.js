@@ -27,24 +27,37 @@ exports.getAll = async ( ctx ) => {
 }
 exports.getOne = async (ctx) => {
 	let article = await redis._hgetall('articles',ctx.params.id);
-	if(article){
-		return await ctx.render('article', {
-	    	post:article
-	  	});
+	if(!ctx.cookies.get('isVisited')){
+		await new Promise((resolve,reject)=>{
+			articleModel.where({_id:ctx.params.id}).update({ $inc: { views: 1 }}).exec((err,result)=>{
+				if(err){
+					return reject(err);
+				};
+				ctx.cookies.set('isVisited', true, {
+					path:'/article/'+ctx.params.id,
+					maxAge:24*60*60*1000
+				});
+				if(!!article){
+					article.views++;
+					redis._hmset('articles', ctx.params.id, article);
+				};
+				resolve();
+			});		
+		});
+
 	};
-	let res = await new Promise((resolve,reject)=>{
-		articleModel.findById(ctx.params.id).exec((err,collection)=>{
-			if(err){
-				return reject(err);
-			};
-			redis._hmset('articles', ctx.params.id, collection);
-			return resolve({
-				msg:"ok",
-				data:collection
-			})
-		});		
-	})
+	if(!article){
+		article = await new Promise((resolve,reject)=>{
+			articleModel.findById(ctx.params.id).exec((err,collection)=>{
+				if(err){
+					return reject(err);
+				};
+				redis._hmset('articles', ctx.params.id, collection);
+				resolve(collection)
+			});		
+		});
+	};
 	await ctx.render('article', {
-    	post:res.data
+    	post:article
   	})	
 }

@@ -8,7 +8,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-input placeholder="请输入密码" v-model="admin_password">
+                <el-input type="password" placeholder="请输入密码" v-model="admin_password">
                     <template slot="prepend">密码</template>
                 </el-input>
             </el-form-item>
