@@ -80,9 +80,9 @@
 						<a class="left">{{= post.user_name }}发表于 {{= post.created_at }}</a>
 						<a class="right">
 					{{? post.cate_name&&post.sub_cate_name }}
-						分类: {{= post.cate_name }}-{{= post.sub_cate_name }}
+						<span class="type">分类: {{= post.cate_name }}-{{= post.sub_cate_name }}</span>
 					{{?}}
-						// 阅读数{{= post.views }}
+						&nbsp;阅读数({{= post.views }})
 					</a>
 					</div>
 				</article>
