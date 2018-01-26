@@ -36,6 +36,9 @@ app.use(helmet());
 app.use(static(
   	path.join( __dirname,  './public')
 ))
+app.use(static(
+  	path.join( __dirname,  '/')
+))
 app.use(views(path.join(__dirname, './views'), {
   	extension: 'ejs',
   	options:{
