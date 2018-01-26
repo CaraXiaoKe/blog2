@@ -22,7 +22,7 @@
 								</header>
 								<% if(post.image!==""&&!isMobile){ %>
 									<div class="con have-img">
-										<a class="wrap-img" href="/article/<%= post._id %>">
+										<a class="wrap-img" href="<%= __URL %>/article/<%= post._id %>">
 											<img class="img-fit lazy" data-original="<%= post.image %>?imageView2/1/w/300/h/240">
 										</a>
 										<p class="abs"><%= post.des %></p>
@@ -33,7 +33,7 @@
 									</div>
 								<% } %>
 								<div class="btn__wrapper">
-									<a class="btn--black" href="/article/<%= post._id %>">阅读更多</a>
+									<a class="btn--black" href="<%= __URL %>/article/<%= post._id %>">阅读更多</a>
 								</div>
 								<div class="meta clear">
 									<a class="left"><%= post.user_name %> 发表于 <%= post.created_at %></a>
@@ -63,7 +63,7 @@
 					</header>
 					{{? !!post.image && !<%= isMobile %> }}
 						<div class="con have-img">
-							<a class="wrap-img" href="/article/{{= post._id }}">
+							<a class="wrap-img" href="<%= __URL %>/article/{{= post._id }}">
 								<img class="img-fit lazy" data-original="{{= post.image }}?imageView2/1/w/300/h/240">
 							</a>
 							<p class="abs">{{= post.des }}</p>
@@ -74,7 +74,7 @@
 						</div>
 					{{?}}
 					<div class="btn__wrapper">
-						<a class="btn--black" href="/article/{{= post._id}}">阅读更多</a>
+						<a class="btn--black" href="<%= __URL %>/article/{{= post._id}}">阅读更多</a>
 					</div>
 					<div class="meta clear">
 						<a class="left">{{= post.user_name }}发表于 {{= post.created_at }}</a>

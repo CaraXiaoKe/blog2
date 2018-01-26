@@ -39,7 +39,8 @@ app.use(static(
 app.use(views(path.join(__dirname, './views'), {
   	extension: 'ejs',
   	options:{
-  		config_cate:cate
+  		config_cate:cate,
+  		__URL:process.env.NODE_ENV === 'development' ? '':'http://92node.com' 
   	}
 }))
 
