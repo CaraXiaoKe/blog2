@@ -373,13 +373,26 @@ pre {
 	    background-color: #f9f2f4;
 	    border-radius: 4px;
 	}
+	pre code {
+		background-color: #f5f5f5;
+	}
 	p:last-child {
 	    margin-bottom: 0;
 	}
 	&>h1:first-child, h2:first-child, h3:first-child, h4:first-child, p:first-child, ul:first-child,ol:first-child, pre:first-child, blockquote:first-child {
 	    margin-top: 0;
 	}
-
+	a {
+		color:#009a61;
+		border-bottom: 1px solid rgba(0,154,97,0.25);
+    	padding-bottom: 1px;
+	}
+	blockquote {
+	    border-left: 2px solid #009A61;
+	    background: #F6F6F6;
+	    color: #555;
+	    font-size: 1em;
+	}
 }
 code, kbd, pre, samp {
 	font-family: "Source Code Pro",Consolas,Menlo,Monaco,"Courier New",monospace;
