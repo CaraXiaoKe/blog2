@@ -1,9 +1,9 @@
 $gray:#ccc;
 $global-color:#444;
 html {
-	font-size: 16px;
+	font-size: 15px;
     -webkit-tap-highlight-color: transparent;
-    font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
+    font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
@@ -14,13 +14,12 @@ html {
 html,body {
 	height:100%;
 	// overflow: hidden;
-	line-height: 1.2;
+	line-height: 1.5;
 }
 html,body,div,nav,footer,aside,section,article,header,ul,li,nav,footer,aside,p,h1,h2,h3{
 	margin:0;
 	padding:0;
 	box-sizing: border-box;
-	display:block;
 }
 a {
 	color:inherit;
@@ -123,6 +122,9 @@ a {
 		line-height:30px;
 		color:#fff;
 		font-weight:bolder;
+		li {
+			list-style: none;
+		}
 		a:hover {
 			text-decoration: underline;
 		}
@@ -334,6 +336,53 @@ pre {
 			}
 		}
 	}	
+}
+.g-con .w-e-text {
+	table {
+		border:none;
+    	border-collapse: collapse;
+    	border-spacing: 0;
+    	th,td {
+    		border: 1px solid #E6E6E6;
+    		padding: 5px 8px;
+    		word-break: normal;
+    	}
+    	th {
+    		background: #F3F3F3;
+    	}
+	}
+	ul,ol {
+		margin-left: 3em;
+    	padding-left: 0;
+	}
+	h1,h2 {
+	    border-bottom: 1px solid #eee;
+	    padding-bottom: 10px;
+	    margin: 1.5em 0 0;
+	}
+	b, strong {
+	    font-weight: bold;
+	}
+	p, h1, h2, h3, h4, h5, table, pre {
+		margin: 1.5em 0;
+	}
+	code {
+	    padding: 2px 4px;
+	    font-size: 90%;
+	    color: #c7254e;
+	    background-color: #f9f2f4;
+	    border-radius: 4px;
+	}
+	p:last-child {
+	    margin-bottom: 0;
+	}
+	&>h1:first-child, h2:first-child, h3:first-child, h4:first-child, p:first-child, ul:first-child,ol:first-child, pre:first-child, blockquote:first-child {
+	    margin-top: 0;
+	}
+
+}
+code, kbd, pre, samp {
+	font-family: "Source Code Pro",Consolas,Menlo,Monaco,"Courier New",monospace;
 }
 
 
