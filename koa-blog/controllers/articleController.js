@@ -51,7 +51,7 @@ exports.getAll = async (ctx) => {
 				if(err){
 					return reject(err);
 				};
-				articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select(filterBy).exec((err,collections)=>{
+				articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
 					if(err){
 						return reject(err);
 					};
