@@ -41,7 +41,7 @@
                 'code',  // 插入代码
             ];
             editor.customConfig.uploadImgServer = '/api/v1/upload';
-            editor.customConfig.pasteFilterStyle = false;
+            editor.customConfig.pasteFilterStyle = true;
             editor.customConfig.uploadFileName = "file";
             editor.customConfig.uploadImgHeaders = {
                 'Authorization': store.get('token')
