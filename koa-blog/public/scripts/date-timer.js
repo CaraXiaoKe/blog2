@@ -65,10 +65,11 @@ DateTimer.prototype.getInnerHTML = function(ym){
     var curDates = this.getDates();//月天数
     var curDate = this.getDate();//月几号
     var curYear = this.getFullYear();
+    var curMonth = this.getMonth();
     var innerHTML = "";
     for(var i=1; i <= curDates; i++){
         var ymd = ym + '-' + (i < 10 ? '0'+i : i);
-        if(i == curDate && curYear == new Date().getFullYear()){  
+        if(i == curDate && curMonth==(new Date().getMonth()+1) && curYear == new Date().getFullYear()){  
             if(this.exist[ym][ymd]){
                 innerHTML+='<div data-id='+ymd+' class="cur edate dateable">' + i + '</div>';
             }else{
@@ -118,7 +119,7 @@ DateTimer.prototype.initEvent = function(){
 };
 DateTimer.prototype.updateDate = function(year,month){
     this.date.setFullYear(year);
-    if(month){
+    if(month!==undefined){
         this.date.setMonth(month);
     };
     this.oyear.innerHTML= this.date.getFullYear();
