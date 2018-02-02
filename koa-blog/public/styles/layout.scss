@@ -366,16 +366,6 @@ pre {
 	p, h1, h2, h3, h4, h5, table, pre {
 		margin: 1.5em 0;
 	}
-	code {
-	    padding: 2px 4px;
-	    font-size: 90%;
-	    color: #c7254e;
-	    background-color: #f9f2f4;
-	    border-radius: 4px;
-	}
-	pre code {
-		background-color: #f5f5f5;
-	}
 	p:last-child {
 	    margin-bottom: 0;
 	}
@@ -396,6 +386,17 @@ pre {
 }
 code, kbd, pre, samp {
 	font-family: "Source Code Pro",Consolas,Menlo,Monaco,"Courier New",monospace;
+}
+code {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+}
+pre code {
+	background-color: #f5f5f5;
+	color: #444;
 }
 
 
