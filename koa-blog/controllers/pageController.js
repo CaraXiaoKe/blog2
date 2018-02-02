@@ -22,7 +22,9 @@ exports.getAll = async ( ctx ) => {
   	await ctx.render('index', {
     	title:"文章列表",
     	posts:res.data,
-    	count:res.count
+    	count:res.count,
+    	nodata:true,
+    	next:page+1
   	})
 }
 exports.getOne = async (ctx) => {

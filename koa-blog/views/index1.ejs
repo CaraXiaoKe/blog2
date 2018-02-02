@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>一滴水博客</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="keywords" content="前端，后端，Vue，Node，Javascript，生活">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+		<link rel="stylesheet" href="/styles/layout.css">
+	</head>
+	<body>
+		<div class="g">
+			<%- include nav.ejs %>
+			<div class="g-con">
+				<div class="m-con">
+					<div class="wrap">
+						<div id="articles">
+						<% posts.forEach(function(post){ %>
+							<article class="u-art">
+								<header class="tc">
+									<h2 class="title"><%= post.title %></h2>
+								</header>
+								<% if(post.image!==""&&!isMobile){ %>
+									<div class="con have-img">
+										<a class="wrap-img" href="<%= __URL %>/article/<%= post._id %>">
+											<img class="img-fit lazy" data-original="<%= post.image %>?imageView2/1/w/300/h/240">
+										</a>
+										<p class="abs"><%= post.des %></p>
+									</div>
+								<% }else{ %>
+									<div class="con">
+										<p class="abs"><%= post.des %></p>
+									</div>
+								<% } %>
+								<div class="btn__wrapper">
+									<a class="btn--black" href="<%= __URL %>/article/<%= post._id %>">阅读更多</a>
+								</div>
+								<div class="meta clear">
+									<a class="left"><%= post.user_name %> 发表于 <%= post.created_at %></a>
+									<a class="right">
+									<% if(config_cate[post.cate]&&config_cate[post.cate].sub){ %>
+										<span class="type">分类: <%= config_cate[post.cate].name %>-<%= config_cate[post.cate].sub[post.sub_cate] %>
+									<% } %></span>
+									阅读数(<%= post.views %>)
+									</a>
+								</div>
+							</article>
+						<% }) %>
+						</div>
+						<a data-id="2" href="javascript:;" class="btn-wrap" onclick="loadMore(event)">
+							加载更多
+						</a>
+					</div>
+				</div>
+				<%- include aside.ejs %>
+			</div>
+		</div>
+		<script id="interpolationtmpl" type="text/x-dot-template">
+			{{~it.data:post:index}}
+				<article class="u-art">
+					<header class="tc">
+						<h2 class="title">{{= post.title }}</h2>
+					</header>
+					{{? !!post.image && !<%= isMobile %> }}
+						<div class="con have-img">
+							<a class="wrap-img" href="<%= __URL %>/article/{{= post._id }}">
+								<img class="img-fit lazy" data-original="{{= post.image }}?imageView2/1/w/300/h/240">
+							</a>
+							<p class="abs">{{= post.des }}</p>
+						</div>
+					{{??}}
+						<div class="con">
+							<p class="abs">{{= post.des }}</p>
+						</div>
+					{{?}}
+					<div class="btn__wrapper">
+						<a class="btn--black" href="<%= __URL %>/article/{{= post._id}}">阅读更多</a>
+					</div>
+					<div class="meta clear">
+						<a class="left">{{= post.user_name }}发表于 {{= post.created_at }}</a>
+						<a class="right">
+					{{? post.cate_name&&post.sub_cate_name }}
+						<span class="type">分类: {{= post.cate_name }}-{{= post.sub_cate_name }}</span>
+					{{?}}
+						&nbsp;阅读数({{= post.views }})
+					</a>
+					</div>
+				</article>
+			{{~}}
+		</script>
+		<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+		<script src="/scripts/date-timer.js"></script>
+		<script src="/scripts/doT.js"></script>
+		<script>
+			var config = {};
+			$.ajax({
+				url:'/v1/dict/cate',
+				type:'GET',
+				dataType:"JSON",
+				success:function(res){
+					config = res;
+				}
+			}); 
+			var interText = doT.template($("#interpolationtmpl").text());
+			function loadMore(e){
+				if(loadMore.done) return;
+				var page = $(e.target).data('id');
+				$.ajax({
+					url:'/v1/articles',
+					type:'GET',
+					dataType:"JSON",
+					data:{
+						page:page,
+						limit:8
+					},
+					success:function(res){
+						for(var i=0,len=res.data.length;i<len;i++){
+							var item = res.data[i];
+							item.cate_name = config[item.cate]&&config[item.cate].name;
+							if(item.cate_name){
+								item.sub_cate_name = config[item.cate].sub[item.sub_cate];
+							}
+						}
+						$("#articles").append(interText(res));
+						$("img.lazy").lazyload({
+		                    effect : "fadeIn"
+		                });
+		                if(page * 8 >= res.count){
+		                	loadMore.done = true;
+		                	$(e.target).text("没有更多了");
+		                }else{
+		                	$(e.target).data('id',page+1);
+		                }
+					}
+				}); 
+			}
+			$(function(){
+				var dateTimer = new DateTimer({
+					url:'/v1/articles',
+				});
+				$("img.lazy").lazyload({
+                    effect : "fadeIn"
+                });
+			});
+		</script>
+		<script>
+			(function(){
+			    var bp = document.createElement('script');
+			    var curProtocol = window.location.protocol.split(':')[0];
+			    if (curProtocol === 'https') {
+			        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+			    }
+			    else {
+			        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+			    }
+			    var s = document.getElementsByTagName("script")[0];
+			    s.parentNode.insertBefore(bp, s);
+			})();
+		</script>
+	</body>
+</html>

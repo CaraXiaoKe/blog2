@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>一滴水博客</title>
+		<title>前端开发|一滴水博客</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="renderer" content="webkit">
 		<meta name="keywords" content="前端，后端，Vue，Node，Javascript，生活">
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 		<link rel="stylesheet" href="/styles/layout.css">
+		<link rel="stylesheet" href="//at.alicdn.com/t/font_532447_4h7f9q5wg04wjyvi.css">
 	</head>
 	<body>
 		<div class="g">
@@ -14,6 +15,7 @@
 			<div class="g-con">
 				<div class="m-con">
 					<div class="wrap">
+						<div class="tc" id="paginationTop"></div>
 						<div id="articles">
 						<% posts.forEach(function(post){ %>
 							<article class="u-art">
@@ -33,23 +35,23 @@
 									</div>
 								<% } %>
 								<div class="btn__wrapper">
-									<a class="btn--black" href="<%= __URL %>/article/<%= post._id %>">阅读更多</a>
+									<a class="btn--blue" href="<%= __URL %>/article/<%= post._id %>">阅读更多</a>
 								</div>
 								<div class="meta clear">
 									<a class="left"><%= post.user_name %> 发表于 <%= post.created_at %></a>
 									<a class="right">
 									<% if(config_cate[post.cate]&&config_cate[post.cate].sub){ %>
-										<span class="type">分类: <%= config_cate[post.cate].name %>-<%= config_cate[post.cate].sub[post.sub_cate] %>
-									<% } %></span>
-									阅读数(<%= post.views %>)
+										<span class="type"><%= config_cate[post.cate].name %>-<%= config_cate[post.cate].sub[post.sub_cate] %>
+									<% } %></span><span class="view">&nbsp;<i class="iconfont icon-liulan"></i> <%= post.views %></span>
 									</a>
 								</div>
 							</article>
 						<% }) %>
 						</div>
-						<a data-id="2" href="javascript:;" class="btn-wrap" onclick="loadMore(event)">
+						<div class="tc mt30" id="pagination"></div>
+						<!-- <a data-id="2" href="javascript:;" class="btn-wrap" onclick="loadMore(event)">
 							加载更多
-						</a>
+						</a> -->
 					</div>
 				</div>
 				<%- include aside.ejs %>
@@ -74,19 +76,39 @@
 						</div>
 					{{?}}
 					<div class="btn__wrapper">
-						<a class="btn--black" href="<%= __URL %>/article/{{= post._id}}">阅读更多</a>
+						<a class="btn--blue" href="<%= __URL %>/article/{{= post._id}}">阅读更多</a>
 					</div>
 					<div class="meta clear">
 						<a class="left">{{= post.user_name }}发表于 {{= post.created_at }}</a>
 						<a class="right">
 					{{? post.cate_name&&post.sub_cate_name }}
-						<span class="type">分类: {{= post.cate_name }}-{{= post.sub_cate_name }}</span>
-					{{?}}
-						&nbsp;阅读数({{= post.views }})
+						<span class="type">{{= post.cate_name }}-{{= post.sub_cate_name }}</span>
+					{{?}}<span class="view">&nbsp;<i class="iconfont icon-liulan"></i> {{= post.views }}</span>
 					</a>
 					</div>
 				</article>
 			{{~}}
+		</script>
+		<script id="paginationTpl" type="text/x-dot-template">
+			<ul class="pagination">
+			    <li {{? it.current==1 }}class="disabled"{{?}}><a href="javascript:;" onclick="setCurrent(1);loadNewPage(1);return false;"> 首页 </a></li>
+				<li {{? it.current==1 }}class="hidden"{{?}}><a href="javascript:;" onclick="setCurrent({{= it.current }} - 1);loadNewPage({{= it.current }} - 1);return false;"> 上一页 </a></li> 
+				{{~it.lists:p:index}}
+					{{? it.current==p.val}}
+			    		<li class="active"><a>{{= p.text }}</a></li>
+			    	{{??}}
+			    		<li><a href="javascript:;" onclick="setCurrent({{= p.val }});loadNewPage({{= p.val }});return false;"> {{= p.text }} </a></li>
+			    	{{?}}
+			    {{~}} 
+			    <li {{? it.current===it.page }}class="hidden"{{?}}>
+			    	<% if(!nodata){ %>
+			    	<a href="javascript:;" onclick="setCurrent({{= it.current }} + 1);loadNewPage({{= it.current }}+1);return false;"> 下一页</a>
+			    	<% }else{ %>
+			    	<a href="javascript:;" onclick="setCurrent({{= it.current }}+1);loadNewPage({{= it.current }}+1);return false;"> 下一页</a>
+			    	 <% } %>
+			    </li>
+				<li {{? it.current==it.page }}class="disabled"{{?}}><a href="javascript:;" onclick="setCurrent({{= it.page }});loadNewPage({{= it.page }});return false;"> 尾页 </a></li>
+			</ul>
 		</script>
 		<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 		<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
@@ -101,18 +123,36 @@
 				success:function(res){
 					config = res;
 				}
-			}); 
+			});
+		</script>
+		<script>
+			var pagination = {
+				limit:8,
+				count:<%= count %>,
+				page:1,
+				current:1,
+				pagegroup:5,
+				lists:[]
+			};
+			var paginationTpl = doT.template($("#paginationTpl").text());
+			pagination.page = Math.ceil(pagination.count / pagination.limit);
+
+			setCurrent(1);
+			function setCurrent(current){
+				pagination.current = current;
+				pagination.lists = pageGroupList(pagination);
+				$("#pagination,#paginationTop").html(paginationTpl(pagination));
+			}
+
 			var interText = doT.template($("#interpolationtmpl").text());
-			function loadMore(e){
-				if(loadMore.done) return;
-				var page = $(e.target).data('id');
+			function loadNewPage(page){
 				$.ajax({
 					url:'/v1/articles',
 					type:'GET',
 					dataType:"JSON",
 					data:{
 						page:page,
-						limit:8
+						limit:pagination.limit
 					},
 					success:function(res){
 						for(var i=0,len=res.data.length;i<len;i++){
@@ -121,20 +161,41 @@
 							if(item.cate_name){
 								item.sub_cate_name = config[item.cate].sub[item.sub_cate];
 							}
-						}
-						$("#articles").append(interText(res));
+						};
+						$("#articles").html(interText(res));
 						$("img.lazy").lazyload({
 		                    effect : "fadeIn"
 		                });
-		                if(page * 8 >= res.count){
-		                	loadMore.done = true;
-		                	$(e.target).text("没有更多了");
-		                }else{
-		                	$(e.target).data('id',page+1);
-		                }
 					}
 				}); 
 			}
+			function pageGroupList(pageInfo){ // 获取分页页码
+				if(<%= isMobile %>){
+					return [];
+				};
+	            var len = pageInfo.page , temp = [], list = [], count = Math.floor(pageInfo.pagegroup / 2) ,center = pageInfo.current;
+	            if( len <= pageInfo.pagegroup ){
+	                while(len--){ temp.push({text:pageInfo.page-len,val:pageInfo.page-len});};
+	                return temp;
+	            }
+	            while(len--){ temp.push(pageInfo.page - len);};
+	            var idx = temp.indexOf(center);                
+	            (idx < count) && ( center = center + count - idx); 
+	            (pageInfo.current > pageInfo.page - count) && ( center = pageInfo.page - count);
+	            temp = temp.splice(center - count -1, pageInfo.pagegroup);                
+	            do {
+	                var t = temp.shift();
+	                list.push({
+	                    text: t,
+	                    val: t
+	                });
+	            }while(temp.length);                
+	            if( pageInfo.page > pageInfo.pagegroup ){
+	                (pageInfo.current > count + 1) && list.unshift({ text:'...',val: list[0].val - 1 });
+	                (pageInfo.current < pageInfo.page - count) && list.push({ text:'...',val: list[list.length - 1].val + 1 });
+	            }
+	            return list;
+	        }
 			$(function(){
 				var dateTimer = new DateTimer({
 					url:'/v1/articles',
