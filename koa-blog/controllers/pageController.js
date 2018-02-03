@@ -1,6 +1,33 @@
 const articleModel = require('../models/articleModel');
 const redis = require('../models/redis');
 const moment = require('moment');
+function pageGroupList(pageInfo,isMobile){ // 获取分页页码
+	if(isMobile){
+		return [];
+	};
+    var len = pageInfo.page , temp = [], list = [], count = Math.floor(pageInfo.pagegroup / 2) ,center = pageInfo.current;
+    if( len <= pageInfo.pagegroup ){
+        while(len--){ temp.push({text:pageInfo.page-len,val:pageInfo.page-len});};
+        return temp;
+    }
+    while(len--){ temp.push(pageInfo.page - len);};
+    var idx = temp.indexOf(center);                
+    (idx < count) && ( center = center + count - idx); 
+    (pageInfo.current > pageInfo.page - count) && ( center = pageInfo.page - count);
+    temp = temp.splice(center - count -1, pageInfo.pagegroup);                
+    do {
+        var t = temp.shift();
+        list.push({
+            text: t,
+            val: t
+        });
+    }while(temp.length);                
+    if( pageInfo.page > pageInfo.pagegroup ){
+        (pageInfo.current > count + 1) && list.unshift({ text:'...',val: list[0].val - 1 });
+        (pageInfo.current < pageInfo.page - count) && list.push({ text:'...',val: list[list.length - 1].val + 1 });
+    }
+    return list;
+}
 exports.getAll = async ( ctx ) => {
 	let {conditions={},limit=8,sortedBy={_id:-1},page=1} = ctx.request.query;
 	let res = await new Promise((resolve,reject)=>{
@@ -20,15 +47,24 @@ exports.getAll = async ( ctx ) => {
 			});
 		})	
 	});
+	let pagination = {
+		limit,
+		count:res.count,
+		current:page,
+		pagegroup:5
+	};
+	pagination.page = Math.ceil(pagination.count / pagination.limit);
   	await ctx.render('index', {
     	title:"文章列表",
     	posts:res.data,
     	count:res.count,
-    	current:page
+    	current:page,
+    	list:pageGroupList(pagination,ctx.state.isMobile),
+    	page:pagination.page
   	})
 }
 exports.getPage = async ( ctx ) => {
-	let page = ctx.params.id;
+	let page = isNaN(ctx.params.id) ? 1:(ctx.params.id-0);
 	let {conditions={},limit=8,sortedBy={_id:-1}} = ctx.request.query;
 	let res = await new Promise((resolve,reject)=>{
 	    let skipNum = (page-1) * limit;
@@ -47,11 +83,20 @@ exports.getPage = async ( ctx ) => {
 			});
 		})	
 	});
+	let pagination = {
+		limit,
+		count:res.count,
+		current:page,
+		pagegroup:5
+	};
+	pagination.page = Math.ceil(pagination.count / pagination.limit);
   	await ctx.render('index', {
     	title:"文章列表",
     	posts:res.data,
     	count:res.count,
-    	current:page
+    	current:page,
+    	list:pageGroupList(pagination,ctx.state.isMobile),
+    	page:pagination.page
   	})
 }
 exports.getDate = async ( ctx ) => {
@@ -71,13 +116,22 @@ exports.getDate = async ( ctx ) => {
 			return resolve(collections)
 		});	
 	});
+	let pagination = {
+		limit,
+		count:res.length,
+		current:1,
+		pagegroup:5
+	};
+	pagination.page = Math.ceil(pagination.count / pagination.limit);
   	await ctx.render('index', {
     	title:"文章列表",
     	posts:res,
     	count:res.length,
-    	limit:limit,
+    	limit,
     	current:1,
-    	date:dateStart
+    	date:dateStart,
+    	list:pageGroupList(pagination,ctx.state.isMobile),
+    	page:pagination.page
   	})
 }
 exports.getOne = async (ctx) => {

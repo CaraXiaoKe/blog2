@@ -16,7 +16,32 @@
 			<div class="g-con">
 				<div class="m-con">
 					<div class="wrap">
-						<div class="tc" id="paginationTop"></div>
+						<div class="tc" id="paginationTop">
+							<ul class="pagination">
+								<% if(current==1){ %>
+							    	<li class="disabled"><a>首页</a></li> 
+								<% }else{ %>
+									<li><a href="<%= __URL %>/p/1" onclick="setCurrent(1,event);loadNewPage(1);return false;"> 首页 </a></li>
+									<li><a href="<%= __URL %>/p/<%= current-1  %>" onclick="setCurrent(<%= current-1 %>,event);loadNewPage(<%= current-1  %>);return false;"> 上一页 </a></li>
+								<% } %>
+								<% list.forEach(function(p){ %>
+									<% if(current==p.val){ %>
+							    		<li class="active"><a><%= p.text  %></a></li>
+							    	<% }else{ %>
+							    		<li><a href="<%= __URL %>/p/<%= p.val  %>" onclick="setCurrent(<%= p.val  %>,event);loadNewPage(<%= p.val  %>);return false;"> <%= p.text  %> </a></li>
+							    	<% } %>
+							    <% }) %> 
+							    <% if(current===page){  %>
+								    <li class="disabled"><a> 尾页 </a></li>
+							    <% }else{ %>
+							    	<li>
+								    	<a href="<%= __URL %>/p/<%= current+1  %>" onclick="setCurrent(<%= current+1 %>,event);loadNewPage(<%= current+1  %>);return false;"> 下一页</a>
+								    </li>
+							    	<li><a href="<%= __URL %>/p/<%= page  %>" onclick="setCurrent(<%= page %>,event);loadNewPage(<%= page  %>);return false;"> 尾页 </a></li>
+							    <% } %>
+								
+							</ul>
+						</div>
 						<div id="articles">
 						<% posts.forEach(function(post){ %>
 							<article class="u-art">
@@ -49,7 +74,33 @@
 							</article>
 						<% }) %>
 						</div>
-						<div class="tc mt30" id="pagination"></div>
+						<div class="tc mt30" id="pagination">
+							<ul class="pagination">
+								<% if(current==1){ %>
+							    	<li class="disabled"><a>首页</a></li> 
+								<% }else{ %>
+									<li><a href="<%= __URL %>/p/1" onclick="setCurrent(1,event);loadNewPage(1);return false;"> 首页 </a></li>
+									<li><a href="<%= __URL %>/p/<%= current-1  %>" onclick="setCurrent(<%= current-1 %>,event);loadNewPage(<%= current-1  %>);return false;"> 上一页 </a></li>
+								<% } %>
+								<% list.forEach(function(p){ %>
+									<% if(current==p.val){ %>
+							    		<li class="active"><a><%= p.text  %></a></li>
+							    	<% }else{ %>
+							    		<li><a href="<%= __URL %>/p/<%= p.val  %>" onclick="setCurrent(<%= p.val  %>,event);loadNewPage(<%= p.val  %>);return false;"> <%= p.text  %> </a></li>
+							    	<% } %>
+							    <% }) %> 
+							    <% if(current===page){  %>
+								    <li class="disabled"><a> 尾页 </a></li>
+							    <% }else{ %>
+							    	<li>
+								    	<a href="<%= __URL %>/p/<%= current+1  %>" onclick="setCurrent(<%= current+1 %>,event);loadNewPage(<%= current+1  %>);return false;"> 下一页</a>
+								    </li>
+							    	<li><a href="<%= __URL %>/p/<%= page  %>" onclick="setCurrent(<%= page %>,event);loadNewPage(<%= page  %>);return false;"> 尾页 </a></li>
+							    <% } %>
+								
+							</ul>
+							
+						</div>
 						<!-- <a data-id="2" href="javascript:;" class="btn-wrap" onclick="loadMore(event)">
 							加载更多
 						</a> -->
@@ -113,7 +164,6 @@
 				    </li>
 			    	<li><a href="<%= __URL %>/p/{{= it.page }}" onclick="setCurrent({{= it.page }},event);loadNewPage({{= it.page }});return false;"> 尾页 </a></li>
 			    {{?}}
-				
 			</ul>
 		</script>
 		<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
@@ -135,15 +185,12 @@
 			var pagination = {
 				limit:<%= typeof limit === "undefined" ? 8:limit %>,
 				count:<%= count %>,
-				page:1,
+				page:<%= page %>,
 				current:<%= current %>,
 				pagegroup:5,
 				lists:[]
 			};
 			var paginationTpl = doT.template($("#paginationTpl").text());
-			pagination.page = Math.ceil(pagination.count / pagination.limit);
-
-			setCurrent(pagination.current);
 			function setCurrent(current,event){
 				pagination.current = current;
 				pagination.lists = pageGroupList(pagination);
