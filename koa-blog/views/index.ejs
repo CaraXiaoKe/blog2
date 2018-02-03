@@ -16,32 +16,21 @@
 			<div class="g-con">
 				<div class="m-con">
 					<div class="wrap">
-						<div class="tc" id="paginationTop">
-							<ul class="pagination">
-								<% if(current==1){ %>
-							    	<li class="disabled"><a>首页</a></li> 
+						<% if(count>0){ %>
+							<div class="tc" id="paginationTop">
+								<% if(typeof cate!=='undefined'){ %>
+									<%- include page_cate.ejs %>
+								<% }else if(typeof sub!=='undefined'){ %>
+									<%- include page_sub.ejs %>
 								<% }else{ %>
-									<li><a href="<%= __URL %>/p/1" onclick="setCurrent(1,event);loadNewPage(1);return false;"> 首页 </a></li>
-									<li><a href="<%= __URL %>/p/<%= current-1  %>" onclick="setCurrent(<%= current-1 %>,event);loadNewPage(<%= current-1  %>);return false;"> 上一页 </a></li>
+									<%- include page.ejs %>
 								<% } %>
-								<% list.forEach(function(p){ %>
-									<% if(current==p.val){ %>
-							    		<li class="active"><a><%= p.text  %></a></li>
-							    	<% }else{ %>
-							    		<li><a href="<%= __URL %>/p/<%= p.val  %>" onclick="setCurrent(<%= p.val  %>,event);loadNewPage(<%= p.val  %>);return false;"> <%= p.text  %> </a></li>
-							    	<% } %>
-							    <% }) %> 
-							    <% if(current===page){  %>
-								    <li class="disabled"><a> 尾页 </a></li>
-							    <% }else{ %>
-							    	<li>
-								    	<a href="<%= __URL %>/p/<%= current+1  %>" onclick="setCurrent(<%= current+1 %>,event);loadNewPage(<%= current+1  %>);return false;"> 下一页</a>
-								    </li>
-							    	<li><a href="<%= __URL %>/p/<%= page  %>" onclick="setCurrent(<%= page %>,event);loadNewPage(<%= page  %>);return false;"> 尾页 </a></li>
-							    <% } %>
-								
-							</ul>
-						</div>
+							</div>
+						<% }else{ %>
+							<div class="tc mt30">
+								暂无内容
+							</div>
+						<% } %>
 						<div id="articles">
 						<% posts.forEach(function(post){ %>
 							<article class="u-art">
@@ -74,33 +63,17 @@
 							</article>
 						<% }) %>
 						</div>
-						<div class="tc mt30" id="pagination">
-							<ul class="pagination">
-								<% if(current==1){ %>
-							    	<li class="disabled"><a>首页</a></li> 
+						<% if(count>0){ %>
+							<div class="tc mt30" id="pagination">
+								<% if(typeof cate!=='undefined'){ %>
+									<%- include page_cate.ejs %>
+								<% }else if(typeof sub!=='undefined'){ %>
+									<%- include page_sub.ejs %>
 								<% }else{ %>
-									<li><a href="<%= __URL %>/p/1" onclick="setCurrent(1,event);loadNewPage(1);return false;"> 首页 </a></li>
-									<li><a href="<%= __URL %>/p/<%= current-1  %>" onclick="setCurrent(<%= current-1 %>,event);loadNewPage(<%= current-1  %>);return false;"> 上一页 </a></li>
+									<%- include page.ejs %>
 								<% } %>
-								<% list.forEach(function(p){ %>
-									<% if(current==p.val){ %>
-							    		<li class="active"><a><%= p.text  %></a></li>
-							    	<% }else{ %>
-							    		<li><a href="<%= __URL %>/p/<%= p.val  %>" onclick="setCurrent(<%= p.val  %>,event);loadNewPage(<%= p.val  %>);return false;"> <%= p.text  %> </a></li>
-							    	<% } %>
-							    <% }) %> 
-							    <% if(current===page){  %>
-								    <li class="disabled"><a> 尾页 </a></li>
-							    <% }else{ %>
-							    	<li>
-								    	<a href="<%= __URL %>/p/<%= current+1  %>" onclick="setCurrent(<%= current+1 %>,event);loadNewPage(<%= current+1  %>);return false;"> 下一页</a>
-								    </li>
-							    	<li><a href="<%= __URL %>/p/<%= page  %>" onclick="setCurrent(<%= page %>,event);loadNewPage(<%= page  %>);return false;"> 尾页 </a></li>
-							    <% } %>
-								
-							</ul>
-							
-						</div>
+							</div>
+						<% } %>
 						<!-- <a data-id="2" href="javascript:;" class="btn-wrap" onclick="loadMore(event)">
 							加载更多
 						</a> -->
@@ -110,6 +83,7 @@
 			</div>
 		</div>
 		<script id="interpolationtmpl" type="text/x-dot-template">
+			<% if(count>0){ %>
 			{{~it.data:post:index}}
 				<article class="u-art">
 					<header class="tc">
@@ -140,31 +114,18 @@
 					</div>
 				</article>
 			{{~}}
+			<% } %>
 		</script>
 		<script id="paginationTpl" type="text/x-dot-template">
-			<ul class="pagination">
-				{{? it.current==1 }}
-			    	<li class="disabled"><a>首页</a></li> 
-				{{??}}
-					<li><a href="<%= __URL %>/p/1" onclick="setCurrent(1,event);loadNewPage(1);return false;"> 首页 </a></li>
-					<li><a href="<%= __URL %>/p/{{= it.current-1 }}" onclick="setCurrent({{= it.current-1 }},event);loadNewPage({{= it.current-1 }});return false;"> 上一页 </a></li>
-				{{?}}
-				{{~it.lists:p:index}}
-					{{? it.current==p.val}}
-			    		<li class="active"><a>{{= p.text }}</a></li>
-			    	{{??}}
-			    		<li><a href="<%= __URL %>/p/{{= p.val }}" onclick="setCurrent({{= p.val }},event);loadNewPage({{= p.val }});return false;"> {{= p.text }} </a></li>
-			    	{{?}}
-			    {{~}} 
-			    {{? it.current===it.page }}
-				    <li class="disabled"><a> 尾页 </a></li>
-			    {{??}}
-			    	<li>
-				    	<a href="<%= __URL %>/p/{{= it.current+1 }}" onclick="setCurrent({{= it.current+1 }},event);loadNewPage({{= it.current+1 }});return false;"> 下一页</a>
-				    </li>
-			    	<li><a href="<%= __URL %>/p/{{= it.page }}" onclick="setCurrent({{= it.page }},event);loadNewPage({{= it.page }});return false;"> 尾页 </a></li>
-			    {{?}}
-			</ul>
+			<% if(count>0){ %>
+				<% if(typeof cate!=='undefined'){ %>
+					<%- include page_cate_dot.ejs %>
+				<% }else if(typeof sub!=='undefined'){ %>
+					<%- include page_sub_dot.ejs %>
+				<% }else{ %>
+					<%- include page_dot.ejs %>
+				<% } %>
+			<% } %>
 		</script>
 		<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 		<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
@@ -188,7 +149,9 @@
 				page:<%= page %>,
 				current:<%= current %>,
 				pagegroup:5,
-				lists:[]
+				lists:[],
+				cate:<%= typeof cate === "undefined" ? "null":cate %>,
+				sub:<%= typeof sub === "undefined" ? "null":sub %>
 			};
 			var paginationTpl = doT.template($("#paginationTpl").text());
 			function setCurrent(current,event){
@@ -241,7 +204,9 @@
 					dataType:"JSON",
 					data:{
 						page:page,
-						limit:pagination.limit
+						limit:pagination.limit,
+						cate:pagination.cate,
+						sub:pagination.sub
 					},
 					success:function(res){
 						for(var i=0,len=res.data.length;i<len;i++){

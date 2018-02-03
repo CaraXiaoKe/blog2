@@ -1,6 +1,6 @@
 <aside class="m-side">
 	<div class="wrap">
-		<div class="date-wrap l">
+		<div class="date-wrap">
 			<div class="u-inline-date" id="box">
 				<div class="clear t-ctr">
 	                <div class="yearwrap right">
@@ -29,13 +29,17 @@
 		      	</div>
 	      	</div>
 		</div>
-		<div class="label-wrap l">
-			<h3 class="tc">标签</h3>
-			<div class="link-box clear">
-				<a class="link" href="javascript:;">前端</a>
-				<a class="link" href="javascript:;">后端</a>
-				<a class="link" href="javascript:;">CSS</a>
-				<a class="link" href="javascript:;">JAVASCRIPT</a>
+		<div class="label-wrap">
+			<h3>分类</h3>
+			<div class="link-box">
+				<% for(index in config_cate){ %>
+				<div><a class="link" href="<%= __URL %>/cate/<%= index %>"><%= config_cate[index].name %></a></div>
+				<ul class="children">
+					<% for(_index in config_cate[index].sub){ %>
+					<li><a class="link" href="<%= __URL %>/sub/<%= _index %>"><%= config_cate[index].sub[_index] %></a></li>
+					<% } %>
+				</ul>
+				<% } %>
 			</div>
 		</div>
 		<!-- <div class="l mt30">

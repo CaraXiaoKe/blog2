@@ -1,0 +1,23 @@
+<ul class="pagination">
+	<% if(current==1||count==0){ %>
+    	<li class="disabled"><a>首页</a></li> 
+	<% }else{ %>
+		<li><a href="<%= __URL %>/p/1" onclick="setCurrent(1,event);loadNewPage(1);return false;"> 首页 </a></li>
+		<li><a href="<%= __URL %>/p/<%= current-1  %>" onclick="setCurrent(<%= current-1 %>,event);loadNewPage(<%= current-1  %>);return false;"> 上一页 </a></li>
+	<% } %>
+	<% list.forEach(function(p){ %>
+		<% if(current==p.val){ %>
+    		<li class="active"><a><%= p.text  %></a></li>
+    	<% }else{ %>
+    		<li><a href="<%= __URL %>/p/<%= p.val  %>" onclick="setCurrent(<%= p.val  %>,event);loadNewPage(<%= p.val  %>);return false;"> <%= p.text  %> </a></li>
+    	<% } %>
+    <% }) %> 
+    <% if(current===page||count==0){  %>
+	    <li class="disabled"><a> 尾页 </a></li>
+    <% }else{ %>
+    	<li>
+	    	<a href="<%= __URL %>/p/<%= current+1  %>" onclick="setCurrent(<%= current+1 %>,event);loadNewPage(<%= current+1  %>);return false;"> 下一页</a>
+	    </li>
+    	<li><a href="<%= __URL %>/p/<%= page  %>" onclick="setCurrent(<%= page %>,event);loadNewPage(<%= page  %>);return false;"> 尾页 </a></li>
+    <% } %>
+</ul>

@@ -134,6 +134,82 @@ exports.getDate = async ( ctx ) => {
     	page:pagination.page
   	})
 }
+exports.getCate = async ( ctx ) => {
+	let page = isNaN(ctx.params.index) ? 1:(ctx.params.index-0);
+	let {conditions={},limit=8,sortedBy={_id:-1}} = ctx.request.query;
+	conditions.cate = ctx.params.id;
+	let res = await new Promise((resolve,reject)=>{
+	    let skipNum = (page-1) * limit;
+		articleModel.where(conditions).count((err,count)=>{
+			if(err){
+				return reject(err);
+			};
+			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+				if(err){
+					return reject(err);
+				};
+				return resolve({
+					data:collections,
+					count
+				})
+			});
+		})	
+	});
+	let pagination = {
+		limit,
+		count:res.count,
+		current:page,
+		pagegroup:5
+	};
+	pagination.page = Math.ceil(pagination.count / pagination.limit);
+  	await ctx.render('index', {
+    	title:"文章列表",
+    	posts:res.data,
+    	count:res.count,
+    	current:page,
+    	list:pageGroupList(pagination,ctx.state.isMobile),
+    	page:pagination.page,
+    	cate:conditions.cate
+  	})
+}
+exports.getSub = async ( ctx ) => {
+	let page = isNaN(ctx.params.index) ? 1:(ctx.params.index-0);
+	let {conditions={},limit=8,sortedBy={_id:-1}} = ctx.request.query;
+	conditions.sub_cate = ctx.params.id;
+	let res = await new Promise((resolve,reject)=>{
+	    let skipNum = (page-1) * limit;
+		articleModel.where(conditions).count((err,count)=>{
+			if(err){
+				return reject(err);
+			};
+			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+				if(err){
+					return reject(err);
+				};
+				return resolve({
+					data:collections,
+					count
+				})
+			});
+		})	
+	});
+	let pagination = {
+		limit,
+		count:res.count,
+		current:page,
+		pagegroup:5
+	};
+	pagination.page = Math.ceil(pagination.count / pagination.limit);
+  	await ctx.render('index', {
+    	title:"文章列表",
+    	posts:res.data,
+    	count:res.count,
+    	current:pagination.count===0 ? 0:page,
+    	list:pagination.count===0 ? []:pageGroupList(pagination,ctx.state.isMobile),
+    	page:pagination.page,
+    	sub:conditions.sub_cate
+  	})
+}
 exports.getOne = async (ctx) => {
 	let article = await redis._hgetall('articles',ctx.params.id);
 	if(!ctx.cookies.get('isVisited')){

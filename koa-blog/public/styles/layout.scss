@@ -232,18 +232,31 @@ a {
 		
 	}
 	.label-wrap {
-		padding-top:30px;
+		padding-top:20px;
+		h3 {
+			padding-left:10px;
+			line-height:30px;
+			color:#76bfa1;
+			background:rgba(1,126,102,0.08);
+		}
 	}
 	.link-box {
-		padding-top:20px;
+		padding-top:10px;
+		padding-left:30px;
+		.children {
+			margin-left:40px;
+			li {
+				list-style-type: square;
+				padding-left:5px;
+			}
+		}
+		.link {
+			line-height: 25px;
+			text-decoration: none;
+			color: #017E66
+		}
 	}
-	.link-box .link {
-		float:left;
-		line-height: 25px;
-		margin-right:10px;
-		text-decoration: underline;
-		color:#858585;
-	}
+	
 	.date-wrap {
 		text-align:center;
 		padding-top:30px;

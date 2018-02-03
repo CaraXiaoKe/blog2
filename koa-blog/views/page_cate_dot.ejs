@@ -1,0 +1,23 @@
+<ul class="pagination">
+	{{? it.current==1 }}
+    	<li class="disabled"><a>首页</a></li> 
+	{{??}}
+		<li><a href="<%= __URL %>/cate/<%= cate %>/p/1" onclick="setCurrent(1,event);loadNewPage(1);return false;"> 首页 </a></li>
+		<li><a href="<%= __URL %>/cate/<%= cate %>/p/{{= it.current-1 }}" onclick="setCurrent({{= it.current-1 }},event);loadNewPage({{= it.current-1 }});return false;"> 上一页 </a></li>
+	{{?}}
+	{{~it.lists:p:index}}
+		{{? it.current==p.val}}
+    		<li class="active"><a>{{= p.text }}</a></li>
+    	{{??}}
+    		<li><a href="<%= __URL %>/cate/<%= cate %>/p/{{= p.val }}" onclick="setCurrent({{= p.val }},event);loadNewPage({{= p.val }});return false;"> {{= p.text }} </a></li>
+    	{{?}}
+    {{~}} 
+    {{? it.current===it.page }}
+	    <li class="disabled"><a> 尾页 </a></li>
+    {{??}}
+    	<li>
+	    	<a href="<%= __URL %>/cate/<%= cate %>/p/{{= it.current+1 }}" onclick="setCurrent({{= it.current+1 }},event);loadNewPage({{= it.current+1 }});return false;"> 下一页</a>
+	    </li>
+    	<li><a href="<%= __URL %>/cate/<%= cate %>/p/{{= it.page }}" onclick="setCurrent({{= it.page }},event);loadNewPage({{= it.page }});return false;"> 尾页 </a></li>
+    {{?}}
+</ul>
