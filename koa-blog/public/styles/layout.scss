@@ -348,6 +348,12 @@ pre {
 	}
 }
 @media (max-width:760px) {
+	#paginationTop {
+		position: sticky;
+    	position: -webkit-sticky;
+    	top: 10px;
+    	z-index:100;
+	}
 	.m-hidden {
 		display:none;
 	}
