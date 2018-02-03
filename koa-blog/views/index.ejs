@@ -91,23 +91,28 @@
 		</script>
 		<script id="paginationTpl" type="text/x-dot-template">
 			<ul class="pagination">
-			    <li {{? it.current==1 }}class="disabled"{{?}}><a href="javascript:;" onclick="setCurrent(1);loadNewPage(1);return false;"> 首页 </a></li>
-				<li {{? it.current==1 }}class="hidden"{{?}}><a href="javascript:;" onclick="setCurrent({{= it.current }} - 1);loadNewPage({{= it.current }} - 1);return false;"> 上一页 </a></li> 
+				{{? it.current==1 }}
+			    	<li class="disabled"><a>首页</a></li> 
+				{{??}}
+					<li><a href="<%= __URL %>/p/1" onclick="setCurrent(1,event);loadNewPage(1);return false;"> 首页 </a></li>
+					<li><a href="<%= __URL %>/p/{{= it.current-1 }}" onclick="setCurrent({{= it.current-1 }},event);loadNewPage({{= it.current-1 }});return false;"> 上一页 </a></li>
+				{{?}}
 				{{~it.lists:p:index}}
 					{{? it.current==p.val}}
 			    		<li class="active"><a>{{= p.text }}</a></li>
 			    	{{??}}
-			    		<li><a href="javascript:;" onclick="setCurrent({{= p.val }});loadNewPage({{= p.val }});return false;"> {{= p.text }} </a></li>
+			    		<li><a href="<%= __URL %>/p/{{= p.val }}" onclick="setCurrent({{= p.val }},event);loadNewPage({{= p.val }});return false;"> {{= p.text }} </a></li>
 			    	{{?}}
 			    {{~}} 
-			    <li {{? it.current===it.page }}class="hidden"{{?}}>
-			    	<% if(!nodata){ %>
-			    	<a href="javascript:;" onclick="setCurrent({{= it.current }} + 1);loadNewPage({{= it.current }}+1);return false;"> 下一页</a>
-			    	<% }else{ %>
-			    	<a href="javascript:;" onclick="setCurrent({{= it.current }}+1);loadNewPage({{= it.current }}+1);return false;"> 下一页</a>
-			    	 <% } %>
-			    </li>
-				<li {{? it.current==it.page }}class="disabled"{{?}}><a href="javascript:;" onclick="setCurrent({{= it.page }});loadNewPage({{= it.page }});return false;"> 尾页 </a></li>
+			    {{? it.current===it.page }}
+				    <li class="disabled"><a> 尾页 </a></li>
+			    {{??}}
+			    	<li>
+				    	<a href="<%= __URL %>/p/{{= it.current+1 }}" onclick="setCurrent({{= it.current+1 }},event);loadNewPage({{= it.current+1 }});return false;"> 下一页</a>
+				    </li>
+			    	<li><a href="<%= __URL %>/p/{{= it.page }}" onclick="setCurrent({{= it.page }},event);loadNewPage({{= it.page }});return false;"> 尾页 </a></li>
+			    {{?}}
+				
 			</ul>
 		</script>
 		<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
@@ -127,48 +132,31 @@
 		</script>
 		<script>
 			var pagination = {
-				limit:8,
+				limit:<%= typeof limit === "undefined" ? 8:limit %>,
 				count:<%= count %>,
 				page:1,
-				current:1,
+				current:<%= current %>,
 				pagegroup:5,
 				lists:[]
 			};
 			var paginationTpl = doT.template($("#paginationTpl").text());
 			pagination.page = Math.ceil(pagination.count / pagination.limit);
 
-			setCurrent(1);
-			function setCurrent(current){
+			setCurrent(pagination.current);
+			function setCurrent(current,event){
 				pagination.current = current;
 				pagination.lists = pageGroupList(pagination);
 				$("#pagination,#paginationTop").html(paginationTpl(pagination));
+				if(window.history.pushState&&event){
+					window.history.pushState({page:current},"",event.target.href);
+				}
 			}
-
-			var interText = doT.template($("#interpolationtmpl").text());
-			function loadNewPage(page){
-				$.ajax({
-					url:'/v1/articles',
-					type:'GET',
-					dataType:"JSON",
-					data:{
-						page:page,
-						limit:pagination.limit
-					},
-					success:function(res){
-						for(var i=0,len=res.data.length;i<len;i++){
-							var item = res.data[i];
-							item.cate_name = config[item.cate]&&config[item.cate].name;
-							if(item.cate_name){
-								item.sub_cate_name = config[item.cate].sub[item.sub_cate];
-							}
-						};
-						$("#articles").html(interText(res));
-						$("img.lazy").lazyload({
-		                    effect : "fadeIn"
-		                });
-					}
-				}); 
-			}
+			window.onpopstate = function(event) {
+				if(window.history.state && typeof window.history.state.page==='number'){
+					setCurrent(window.history.state.page);
+					loadNewPage(window.history.state.page);
+				}
+			};
 			function pageGroupList(pageInfo){ // 获取分页页码
 				if(<%= isMobile %>){
 					return [];
@@ -196,9 +184,40 @@
 	            }
 	            return list;
 	        }
+
+	        var interText = doT.template($("#interpolationtmpl").text());
+	        function loadNewPage(page){
+				$.ajax({
+					url:'/v1/articles',
+					type:'GET',
+					dataType:"JSON",
+					data:{
+						page:page,
+						limit:pagination.limit
+					},
+					success:function(res){
+						for(var i=0,len=res.data.length;i<len;i++){
+							var item = res.data[i];
+							item.cate_name = config[item.cate]&&config[item.cate].name;
+							if(item.cate_name){
+								item.sub_cate_name = config[item.cate].sub[item.sub_cate];
+							}
+						};
+						$("#articles").html(interText(res));
+						$("img.lazy").lazyload({
+		                    effect : "fadeIn"
+		                });
+					}
+				}); 
+			}
+
 			$(function(){
 				var dateTimer = new DateTimer({
 					url:'/v1/articles',
+					currentDate:<%= typeof date === "undefined" %> ? new Date():new Date("<%= typeof date === 'string'&&date %>"),
+					handler:function(dateStr){
+						location.href="/date/"+dateStr;
+					}
 				});
 				$("img.lazy").lazyload({
                     effect : "fadeIn"

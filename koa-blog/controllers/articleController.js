@@ -1,5 +1,6 @@
 const articleModel = require('../models/articleModel');
 const redis = require('../models/redis');
+const moment = require('moment');
 exports.create = async (ctx) => {
 	let article = ctx.request.body; 
 	await ctx.Promise((resolve,reject)=>{
@@ -9,6 +10,7 @@ exports.create = async (ctx) => {
 			};
 			article.user_name = ctx.token.user_name;
 			article.count = count+1;
+			article.created_at = moment().format('YYYY-MM-DD HH:mm');
 			new articleModel(article).save(function(err,collection){
 				if(err){
 					return reject(err);

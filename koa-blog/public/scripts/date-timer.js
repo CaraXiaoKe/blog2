@@ -1,7 +1,7 @@
 function DateTimer(option){
     this.url       = option.url;
     this.exist     = {};
-    this.date      = new Date();
+    this.date      = option.currentDate||new Date();
     this.obody     = document.body;
     this.omonth    = document.getElementById("month");
     this.oyear     = document.getElementById("year");
@@ -10,6 +10,7 @@ function DateTimer(option){
     this.nextmonth = document.getElementById("nextmonth");
     this.prevyear  = document.getElementById("prevyear");
     this.nextyear  = document.getElementById("nextyear");
+    this.handler = option.handler;
     this.init();
     this.initEvent();
 }
@@ -114,7 +115,7 @@ DateTimer.prototype.initEvent = function(){
     $(document).on("click",".dateable",function(e){
         $(this).addClass("now").siblings().removeClass("now");
         var dateVal = $(e.target).data('id');
-        alert(dateVal); 
+        this.handler(dateVal);
     }.bind(this));
 };
 DateTimer.prototype.updateDate = function(year,month){

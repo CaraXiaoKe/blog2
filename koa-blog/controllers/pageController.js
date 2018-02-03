@@ -1,5 +1,6 @@
 const articleModel = require('../models/articleModel');
 const redis = require('../models/redis');
+const moment = require('moment');
 exports.getAll = async ( ctx ) => {
 	let {conditions={},limit=8,sortedBy={_id:-1},page=1} = ctx.request.query;
 	let res = await new Promise((resolve,reject)=>{
@@ -23,8 +24,60 @@ exports.getAll = async ( ctx ) => {
     	title:"文章列表",
     	posts:res.data,
     	count:res.count,
-    	nodata:true,
-    	next:page+1
+    	current:page
+  	})
+}
+exports.getPage = async ( ctx ) => {
+	let page = ctx.params.id;
+	let {conditions={},limit=8,sortedBy={_id:-1}} = ctx.request.query;
+	let res = await new Promise((resolve,reject)=>{
+	    let skipNum = (page-1) * limit;
+		articleModel.where(conditions).count((err,count)=>{
+			if(err){
+				return reject(err);
+			};
+			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+				if(err){
+					return reject(err);
+				};
+				return resolve({
+					data:collections,
+					count
+				})
+			});
+		})	
+	});
+  	await ctx.render('index', {
+    	title:"文章列表",
+    	posts:res.data,
+    	count:res.count,
+    	current:page
+  	})
+}
+exports.getDate = async ( ctx ) => {
+	let dateStart = ctx.params.id;
+	let dateEnd = moment(dateStart).add(1,'day').format('YYYY-MM-DD');
+	let limit = 20;
+	let {conditions={},sortedBy={_id:-1}} = ctx.request.query;
+	conditions.created_at = {
+		$gte: dateStart, 
+		$lt: dateEnd
+	};
+	let res = await new Promise((resolve,reject)=>{
+		articleModel.find(conditions).sort(sortedBy).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+			if(err){
+				return reject(err);
+			};
+			return resolve(collections)
+		});	
+	});
+  	await ctx.render('index', {
+    	title:"文章列表",
+    	posts:res,
+    	count:res.length,
+    	limit:limit,
+    	current:1,
+    	date:dateStart
   	})
 }
 exports.getOne = async (ctx) => {
