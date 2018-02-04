@@ -32,6 +32,7 @@ a {
 }
 .overflow-hidden {
 	overflow:hidden;
+	position:fixed;
 }
 .clear::before,.clear::after {
 	content:'.';
