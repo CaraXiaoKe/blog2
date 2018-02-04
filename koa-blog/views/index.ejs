@@ -235,6 +235,10 @@
 				$("img.lazy").lazyload({
                     effect : "fadeIn"
                 });
+                $("#ac-gn").on("click",function(e){
+                	$(".m-nav").toggleClass("open");
+                	$("body").toggleClass("overflow-hidden");
+                })
 			});
 		</script>
 		<script>

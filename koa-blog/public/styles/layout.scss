@@ -30,6 +30,9 @@ a {
 .mt30 {
 	margin-top:30px;
 }
+.overflow-hidden {
+	overflow:hidden;
+}
 .clear::before,.clear::after {
 	content:'.';
 	display: block;
@@ -93,6 +96,9 @@ a {
 	// background:url(http://cdn.92node.com/15122696686142fnk1.jpeg) no-repeat center top;
 	background:rgba(0,154,97,0.5) url(https://static.segmentfault.com/v-5a742a0b/global/img/banner-login/banner-bg.svg) no-repeat center top;
 	background-size:cover;
+	.ac-gn {
+		display:none;
+	}
 	.bg {
 		position:absolute;
 		z-index:-1;
@@ -216,6 +222,8 @@ a {
 	right:0;
 	width:300px;
 	padding:0 20px 0 15px;
+	background:#fff;
+	z-index:101;
 	.l {
 		padding-bottom:30px;
 		border-bottom: 1px solid #e4e4e4;
@@ -341,7 +349,17 @@ pre {
 }
 @media (max-width:1000px) {
 	.m-side {
-		display: none;
+		position:fixed;
+		transform:translateX(100%);
+		transition: transform 0.5s;
+		height:100%;
+		overflow-x: auto;
+		border-left:1px solid #e4e4e4;
+		.wrap {
+			position:absolute;
+			width:100%;
+			padding: 0 20px 0 15px;
+		}
 	}
 	.m-con{ 
 		padding-right: 0px;
@@ -386,6 +404,58 @@ pre {
 			li {
 				width:60px;
 				display:inline-block;
+			}
+		}
+		.ac-gn {
+			position:absolute;
+			bottom:0;
+			display:block;
+			width:35px;
+			height:36px;
+			.center {
+				width:100%;
+				height:100%;
+				position:absolute;
+				top:0;
+				left:0;
+				transition:0.3s;
+			}
+			b {
+				position:absolute;
+				display:block;
+				width:17px;
+				height:1px;
+				left:9px;
+				background:#fff;
+				transition:0.3s;
+			}
+			.it {
+				b {
+					top:12.5px;
+				}
+			}
+			.ib {
+				
+				b {
+					bottom:12.5px;
+				}
+			}
+		}
+		&.open + .g-con .m-side {
+			transform:translateX(0);
+		}
+		&.open {
+			.it {
+				transform:rotate(45deg);
+				b {
+					transform:translateY(5px);
+				}
+			}
+			.ib {
+				transform:rotate(-45deg);
+				b {
+					transform:translateY(-5px);
+				}
 			}
 		}
 	}	
