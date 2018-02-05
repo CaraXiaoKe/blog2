@@ -1,6 +1,9 @@
 const articleModel = require('../models/articleModel');
 const redis = require('../models/redis');
 const moment = require('moment');
+const ejs = require('ejs');
+const fs = require('fs');
+const path = require('path');
 exports.create = async (ctx) => {
 	let article = ctx.request.body; 
 	await ctx.Promise((resolve,reject)=>{
@@ -94,6 +97,15 @@ exports.updateOne = async (ctx) => {
 			if(err){
 				return reject(err);
 			};
+			var str = fs.readFileSync(path.resolve(__dirname ,'../views/article.ejs'), 'utf8');
+			var ret = ejs.render(str, {
+			  	post: collection
+			});
+			fs.writeFileSync(path.resolve(__dirname ,'../posts/'+collection._id+'.html'), ret, {
+			    flag: 'w'
+			}, function(err){
+			    if(err) throw err;
+			});
 			redis._hmset('articles', ctx.params.id, collection);
 			return resolve({
 				msg:"ok",

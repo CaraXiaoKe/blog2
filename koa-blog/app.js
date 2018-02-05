@@ -12,7 +12,6 @@ const bodyParser = require('koa-bodyparser');
 const static = require('koa-static');
 const views = require('koa-views');
 const PORT = process.env.PORT||setting.PORT||3000;
-
 const {cate} = require('./config/dict');
 
 const ResponseHandle = require('./middlewares/resultCapture');
@@ -35,6 +34,9 @@ app.use(async(ctx,next)=>{
 app.use(helmet());
 app.use(static(
   	path.join( __dirname,  './public')
+))
+app.use(static(
+  	path.join( __dirname,  './post')
 ))
 app.use(static(
   	path.join( __dirname,  '/')
