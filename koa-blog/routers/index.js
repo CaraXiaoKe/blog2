@@ -7,6 +7,7 @@ router.get('/', pageController.getAll)
 .get('/date/:id', pageController.getDate)
 .get('/cate/:id',pageController.getCate).get('/cate/:id/p/:index', pageController.getCate)
 .get('/sub/:id',pageController.getSub).get('/sub/:id/p/:index', pageController.getSub)
+.get('/article/:id.html',pageController.getOne)
 .get('/article/:id',pageController.getOne)
 .get('/404', async ( ctx )=>{
 	await ctx.render('404', {

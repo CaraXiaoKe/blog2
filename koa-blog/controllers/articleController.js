@@ -97,15 +97,15 @@ exports.updateOne = async (ctx) => {
 			if(err){
 				return reject(err);
 			};
-			var str = fs.readFileSync(path.resolve(__dirname ,'../views/article.ejs'), 'utf8');
-			var ret = ejs.render(str, {
-			  	post: collection
-			});
-			fs.writeFileSync(path.resolve(__dirname ,'../posts/'+collection._id+'.html'), ret, {
-			    flag: 'w'
-			}, function(err){
-			    if(err) throw err;
-			});
+			// var str = fs.readFileSync(path.resolve(__dirname ,'../views/article.ejs'), 'utf8');
+			// var ret = ejs.render(str, {
+			//   	post: collection
+			// });
+			// fs.writeFileSync(path.resolve(__dirname ,'../posts/'+collection._id+'.html'), ret, {
+			//     flag: 'w'
+			// }, function(err){
+			//     if(err) throw err;
+			// });
 			redis._hmset('articles', ctx.params.id, collection);
 			return resolve({
 				msg:"ok",

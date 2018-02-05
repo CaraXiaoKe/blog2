@@ -222,6 +222,10 @@ exports.getOne = async (ctx) => {
 					path:'/article/'+ctx.params.id,
 					maxAge:24*60*60*1000
 				});
+				ctx.cookies.set('isVisited', true, {
+					path:'/article/'+ctx.params.id+'.html',
+					maxAge:24*60*60*1000
+				});
 				if(!!article){
 					article.views++;
 					redis._hmset('articles', ctx.params.id, article);
