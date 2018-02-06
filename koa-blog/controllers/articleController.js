@@ -42,7 +42,7 @@ exports.getAll = async (ctx) => {
 	};
 	await ctx.Promise((resolve,reject)=>{
 		if(!limit||!page){
-			articleModel.find(conditions).sort(sortedBy).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+			articleModel.find(conditions).sort(sortedBy).select("des title views reviews created cate sub_cate user_name image created_at pinyin_title").exec((err,collections)=>{
 				if(err){
 					return reject(err);
 				};
@@ -57,7 +57,7 @@ exports.getAll = async (ctx) => {
 				if(err){
 					return reject(err);
 				};
-				articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+				articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at pinyin_title").exec((err,collections)=>{
 					if(err){
 						return reject(err);
 					};
