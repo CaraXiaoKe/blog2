@@ -13,6 +13,7 @@ exports.create = async (ctx) => {
 			};
 			article.user_name = ctx.token.user_name;
 			article.count = count+1;
+			article.index_title = "dd";
 			article.created_at = moment().format('YYYY-MM-DD HH:mm');
 			new articleModel(article).save(function(err,collection){
 				if(err){
@@ -72,6 +73,9 @@ exports.getAll = async (ctx) => {
 	})	
 }
 exports.getOne = async (ctx) => {
+	articleModel.findOne({count:1}).exec((err,collection)=>{
+			console.log(collection)
+		});
 	let article = await redis._hgetall('articles',ctx.params.id);
 	await ctx.Promise((resolve,reject)=>{
 		if(article){
@@ -80,6 +84,7 @@ exports.getOne = async (ctx) => {
 				data:article
 			})
 		};
+		
 		articleModel.findById(ctx.params.id).exec((err,collection)=>{
 			if(err){
 				return reject(err);

@@ -36,7 +36,7 @@ exports.getAll = async ( ctx ) => {
 			if(err){
 				return reject(err);
 			};
-			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at pinyin_title").exec((err,collections)=>{
 				if(err){
 					return reject(err);
 				};
@@ -72,7 +72,7 @@ exports.getPage = async ( ctx ) => {
 			if(err){
 				return reject(err);
 			};
-			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at pinyin_title").exec((err,collections)=>{
 				if(err){
 					return reject(err);
 				};
@@ -109,7 +109,7 @@ exports.getDate = async ( ctx ) => {
 		$lt: dateEnd
 	};
 	let res = await new Promise((resolve,reject)=>{
-		articleModel.find(conditions).sort(sortedBy).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+		articleModel.find(conditions).sort(sortedBy).select("des title views reviews created cate sub_cate user_name image created_at pinyin_title").exec((err,collections)=>{
 			if(err){
 				return reject(err);
 			};
@@ -144,7 +144,7 @@ exports.getCate = async ( ctx ) => {
 			if(err){
 				return reject(err);
 			};
-			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at pinyin_title").exec((err,collections)=>{
 				if(err){
 					return reject(err);
 				};
@@ -182,7 +182,7 @@ exports.getSub = async ( ctx ) => {
 			if(err){
 				return reject(err);
 			};
-			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at").exec((err,collections)=>{
+			articleModel.find(conditions).sort(sortedBy).limit(limit-0).skip(skipNum).select("des title views reviews created cate sub_cate user_name image created_at pinyin_title").exec((err,collections)=>{
 				if(err){
 					return reject(err);
 				};
@@ -214,7 +214,7 @@ exports.getOne = async (ctx) => {
 	let article = await redis._hgetall('articles',ctx.params.id);
 	if(!ctx.cookies.get('isVisited')){
 		await new Promise((resolve,reject)=>{
-			articleModel.where({_id:ctx.params.id}).update({ $inc: { views: 1 }}).exec((err,result)=>{
+			articleModel.findOne({pinyin_title:ctx.params.id}).update({ $inc: { views: 1 }}).exec((err,result)=>{
 				if(err){
 					return reject(err);
 				};
@@ -237,7 +237,7 @@ exports.getOne = async (ctx) => {
 	};
 	if(!article){
 		article = await new Promise((resolve,reject)=>{
-			articleModel.findById(ctx.params.id).exec((err,collection)=>{
+			articleModel.findOne(ctx.params.id).exec((err,collection)=>{
 				if(err){
 					return reject(err);
 				};

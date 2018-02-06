@@ -42,6 +42,12 @@ const articleSchema = mongoose.Schema({
       type:String,
       require:true
     },
+    pinyin_title:{
+      type:String,
+      require:true,
+      unqiue:true,
+      index:true
+    },
     created_at:{
       type:String,
       default:moment().format('YYYY-MM-DD HH:mm')
