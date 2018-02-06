@@ -237,7 +237,7 @@ exports.getOne = async (ctx) => {
 	};
 	if(!article){
 		article = await new Promise((resolve,reject)=>{
-			articleModel.findOne(ctx.params.id).exec((err,collection)=>{
+			articleModel.findOne({pinyin_title:ctx.params.id}).exec((err,collection)=>{
 				if(err){
 					return reject(err);
 				};
