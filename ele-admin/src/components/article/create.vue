@@ -6,6 +6,11 @@
                     <el-input v-model="form.title"/>
                 </el-col>
             </el-form-item>
+            <el-form-item label="标题拼写" prop="pinyin_title">
+                <el-col :lg="12" :sm="18">
+                    <el-input v-model="form.pinyin_title"/>
+                </el-col>
+            </el-form-item>
             <el-form-item label="文章简述" prop="des">
                 <el-col :lg="12" :sm="18">
                     <el-input type="textarea" v-model="form.des"/>
@@ -97,7 +102,8 @@
                     sub_cate:"",
                     tags:[],
                     content:"",
-                    image:''
+                    image:'',
+                    pinyin_title:''
                 },
                 cates:{},
                 isInt:false,
@@ -106,6 +112,9 @@
                 rules:{
                     title:[
                         {required:true,trigger:'blur',message:"请输入标题"}
+                    ],
+                    pinyin_title:[
+                        {required:true,trigger:'blur',message:"请输入拼音或英文单词，并以-链接"}
                     ],
                     cate:[
                         {required:true,trigger:'change',message:"请选择分类"}

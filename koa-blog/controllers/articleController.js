@@ -13,7 +13,6 @@ exports.create = async (ctx) => {
 			};
 			article.user_name = ctx.token.user_name;
 			article.count = count+1;
-			article.index_title = "dd";
 			article.created_at = moment().format('YYYY-MM-DD HH:mm');
 			new articleModel(article).save(function(err,collection){
 				if(err){

@@ -8,10 +8,15 @@ module.exports =  (ctx, next) => {
 		}).catch(err => {
 			if(err.stack){
 				ctx.status = 500;
-				console.log(err.stack);
+				// if(err.code==11000){
+				// 	return ctx.body = {
+				// 		stack:err.stack,
+				// 		errmsg:err.message
+				// 	};
+				// }
 				ctx.body = {
 					stack:err.stack,
-					errmsg:"服务器异常"
+					errmsg:err.message
 				};
 				return;
 			};
