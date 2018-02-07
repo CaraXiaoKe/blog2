@@ -26,9 +26,10 @@ app.use(async(ctx,next)=>{
   	} catch (err) {
 		ctx.status = err.status || 500;
 		ctx.body = err.body || err.message;
-		console.error(ctx.url);
-		console.error(err.toString());
-		console.error(err.stack+"\n");
+		ctx.redirect('/404');
+		// console.error(ctx.url);
+		// console.error(err.toString());
+		// console.error(err.stack+"\n");
   	}
 })
 app.use(helmet());

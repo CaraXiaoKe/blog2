@@ -218,10 +218,10 @@ exports.getOne = async (ctx) => {
 				if(err){
 					return reject(err);
 				};
-				ctx.cookies.set('isVisited', true, {
-					path:'/article/'+ctx.params.id,
-					maxAge:24*60*60*1000
-				});
+				// ctx.cookies.set('isVisited', true, {
+				// 	path:'/article/'+ctx.params.id,
+				// 	maxAge:24*60*60*1000
+				// });
 				ctx.cookies.set('isVisited', true, {
 					path:'/article/'+ctx.params.id+'.html',
 					maxAge:24*60*60*1000
@@ -238,6 +238,43 @@ exports.getOne = async (ctx) => {
 	if(!article){
 		article = await new Promise((resolve,reject)=>{
 			articleModel.findOne({pinyin_title:ctx.params.id}).exec((err,collection)=>{
+				if(err){
+					return reject(err);
+				};
+				redis._hmset('articles', ctx.params.id, collection);
+				resolve(collection)
+			});		
+		});
+	};
+	await ctx.render('article', {
+    	post:article
+  	})	
+}
+exports.getOneById = async (ctx) => {
+	let article = await redis._hgetall('articles',ctx.params.id);
+	if(!ctx.cookies.get('isVisited')){
+		
+		await new Promise((resolve,reject)=>{
+			articleModel.findById(ctx.params.id).update({ $inc: { views: 1 }}).exec((err,result)=>{
+				if(err){
+					return reject(err);
+				};
+				ctx.cookies.set('isVisited', true, {
+					path:'/article/'+ctx.params.id,
+					maxAge:24*60*60*1000
+				});
+				if(!!article){
+					article.views++;
+					redis._hmset('articles', ctx.params.id, article);
+				};
+				resolve();
+			});		
+		});
+
+	};
+	if(!article){
+		article = await new Promise((resolve,reject)=>{
+			articleModel.findById(ctx.params.id).exec((err,collection)=>{
 				if(err){
 					return reject(err);
 				};

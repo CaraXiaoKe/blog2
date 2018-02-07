@@ -19,6 +19,7 @@ exports.create = async (ctx) => {
 					return reject(err);
 				};
 				redis._hmset('articles', collection._id, collection);
+				redis._hmset('articles', collection.pinyin_title, collection);
 				return resolve({
 					msg:"ok",
 					data:collection
@@ -72,9 +73,6 @@ exports.getAll = async (ctx) => {
 	})	
 }
 exports.getOne = async (ctx) => {
-	articleModel.findOne({count:1}).exec((err,collection)=>{
-			console.log(collection)
-		});
 	let article = await redis._hgetall('articles',ctx.params.id);
 	await ctx.Promise((resolve,reject)=>{
 		if(article){
@@ -110,7 +108,8 @@ exports.updateOne = async (ctx) => {
 			// }, function(err){
 			//     if(err) throw err;
 			// });
-			redis._hmset('articles', ctx.params.id, collection);
+			redis._hmset('articles', collection._id, collection);
+			redis._hmset('articles', collection.pinyin_title, collection);
 			return resolve({
 				msg:"ok",
 				data:collection
