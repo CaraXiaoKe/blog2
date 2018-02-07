@@ -141,6 +141,11 @@
 					config = res;
 				}
 			});
+			var htmlobj=$.ajax({url:"/visit.log",async:false});
+			if(htmlobj.readyState===4){
+				$("#count").text(htmlobj.responseText.match(/visit:/g).length);
+			}
+			
 		</script>
 		<script>
 			var pagination = {

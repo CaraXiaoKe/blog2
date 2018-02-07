@@ -15,9 +15,16 @@ const PORT = process.env.PORT||setting.PORT||3000;
 const {cate} = require('./config/dict');
 
 const ResponseHandle = require('./middlewares/resultCapture');
-
+const moment = require('moment');
 //服务器异常 捕获
 app.use(async(ctx,next)=>{
+	if(ctx.request.url==='/'&&!ctx.cookies.get('tag')){
+		ctx.cookies.set('tag', true, {
+			path:'/'
+		});
+	    var data = "visit:"+ctx.headers["user-agent"] + ' '+moment().format('YYYY-MM-DD HH:mm:ss')+'\n';
+		fs.appendFile('visit.log',data,'utf8',function (err) {});
+	};
 	ctx.state.isMobile = /(iPhone|iPod|Android|ios)/i.test(ctx.headers["user-agent"]);
 	try {
 		await next()
