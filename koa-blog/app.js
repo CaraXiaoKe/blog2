@@ -22,7 +22,8 @@ app.use(async(ctx,next)=>{
 		ctx.cookies.set('tag', true, {
 			path:'/'
 		});
-	    var data = "visit:"+ctx.headers["user-agent"] + ' '+moment().format('YYYY-MM-DD HH:mm:ss')+'\n';
+		var ip = ctx.headers['x-forwarded-for'] || (ctx.socket&&ctx.socket.remoteAddress);
+	    var data = "visit:"+ctx.headers["user-agent"] + ip +' '+moment().format('YYYY-MM-DD HH:mm:ss')+'\n';
 		fs.appendFile('visit.log',data,'utf8',function (err) {});
 	};
 	ctx.state.isMobile = /(iPhone|iPod|Android|ios)/i.test(ctx.headers["user-agent"]);
