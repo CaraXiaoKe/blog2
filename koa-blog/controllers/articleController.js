@@ -1,9 +1,6 @@
 const articleModel = require('../models/articleModel');
 const redis = require('../models/redis');
 const moment = require('moment');
-const ejs = require('ejs');
-const fs = require('fs');
-const path = require('path');
 exports.create = async (ctx) => {
 	let article = ctx.request.body; 
 	await ctx.Promise((resolve,reject)=>{
@@ -75,13 +72,6 @@ exports.getAll = async (ctx) => {
 exports.getOne = async (ctx) => {
 	let article = await redis._hgetall('articles',ctx.params.id);
 	await ctx.Promise((resolve,reject)=>{
-		if(article){
-			return resolve({
-				msg:"ok",
-				data:article
-			})
-		};
-		
 		articleModel.findById(ctx.params.id).exec((err,collection)=>{
 			if(err){
 				return reject(err);

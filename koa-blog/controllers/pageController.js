@@ -214,7 +214,7 @@ exports.getOne = async (ctx) => {
 	let article = await redis._hgetall('articles',ctx.params.id);
 	if(!ctx.cookies.get('isVisited')){
 		await new Promise((resolve,reject)=>{
-			articleModel.findOne({pinyin_title:ctx.params.id}).update({ $inc: { views: 1 }}).exec((err,result)=>{
+			articleModel.findOneAndUpdate({pinyin_title:ctx.params.id},{ $inc: { views: 1 }},{new: true}).exec((err,result)=>{
 				if(err){
 					return reject(err);
 				};
@@ -229,6 +229,7 @@ exports.getOne = async (ctx) => {
 				if(!!article){
 					article.views++;
 					redis._hmset('articles', ctx.params.id, article);
+					redis._hmset('articles', result._id, article);
 				};
 				resolve();
 			});		
@@ -242,6 +243,7 @@ exports.getOne = async (ctx) => {
 					return reject(err);
 				};
 				redis._hmset('articles', ctx.params.id, collection);
+				redis._hmset('articles', collection._id, collection);
 				resolve(collection)
 			});		
 		});
@@ -253,9 +255,8 @@ exports.getOne = async (ctx) => {
 exports.getOneById = async (ctx) => {
 	let article = await redis._hgetall('articles',ctx.params.id);
 	if(!ctx.cookies.get('isVisited')){
-		
 		await new Promise((resolve,reject)=>{
-			articleModel.findById(ctx.params.id).update({ $inc: { views: 1 }}).exec((err,result)=>{
+			articleModel.findByIdAndUpdate(ctx.params.id,{ $inc: { views: 1 }},{new: true}).exec((err,result)=>{
 				if(err){
 					return reject(err);
 				};
@@ -266,11 +267,11 @@ exports.getOneById = async (ctx) => {
 				if(!!article){
 					article.views++;
 					redis._hmset('articles', ctx.params.id, article);
+					redis._hmset('articles', result.pinyin_title, article);
 				};
 				resolve();
 			});		
 		});
-
 	};
 	if(!article){
 		article = await new Promise((resolve,reject)=>{
@@ -279,6 +280,7 @@ exports.getOneById = async (ctx) => {
 					return reject(err);
 				};
 				redis._hmset('articles', ctx.params.id, collection);
+				redis._hmset('articles', collection.pinyin_title, collection);
 				resolve(collection)
 			});		
 		});
