@@ -507,6 +507,9 @@ pre {
 	    color: #555;
 	    font-size: 1em;
 	}
+	img {
+		max-width:100%;
+	}
 }
 code, kbd, pre, samp {
 	font-family: "Source Code Pro",Consolas,Menlo,Monaco,"Courier New",monospace;
