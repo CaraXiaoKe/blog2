@@ -7,6 +7,9 @@
 		<meta name="renderer" content="webkit">
 		<meta name="keywords" content="前端开发，node，后端">
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+		<% if(!main){%>
+			<link rel="canonical" href="<%= __URL %>/article/<%= post.pinyin_title %>.html">
+		<% } %>
 		<link rel="stylesheet" href="/styles/layout.css">
 		<link rel="stylesheet" href="//at.alicdn.com/t/font_532447_ems19ao9ehh69a4i.css">
 		<style>

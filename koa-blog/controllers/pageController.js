@@ -249,7 +249,8 @@ exports.getOne = async (ctx) => {
 		});
 	};
 	await ctx.render('article', {
-    	post:article
+    	post:article,
+    	main:true
   	})	
 }
 exports.getOneById = async (ctx) => {
@@ -286,6 +287,7 @@ exports.getOneById = async (ctx) => {
 		});
 	};
 	await ctx.render('article', {
-    	post:article
+    	post:article,
+    	main:false
   	})	
 }
