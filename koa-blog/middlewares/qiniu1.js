@@ -3,6 +3,7 @@ var qiniu = require("qiniu");
 var fs = require('fs');
 
 const multer = require('koa-multer');//加载koa-multer模块
+
 //文件上传  
 //配置  
 const storage = multer.diskStorage({  
@@ -12,12 +13,22 @@ const storage = multer.diskStorage({
   },  
   //修改文件名称  
   filename: function (req, file, cb) {   
-  	filename = toRandomName(file.originalname);
-    cb(null,filename);  
+    cb(null,toRandomName(file.originalname));  
   }  
 })  
 //加载配置  
 var upload = multer({ storage });
+
+
+qiniu.conf.ACCESS_KEY = settings.ACCESS_KEY;
+qiniu.conf.SECRET_KEY = settings.SECRET_KEY;
+
+var bucket = settings.BUCKET;
+
+function uptoken(bucket, key) {
+	var putPolicy = new qiniu.rs.PutPolicy(bucket+":"+key);
+	return putPolicy.token();
+}
 function toRandomName(filename){
     var arr = filename.split('.');
     var suffix = '.'+arr[arr.length-1];
@@ -30,12 +41,27 @@ function toRandomName(filename){
     return randomStr+suffix;
 }
 var putFile = async (ctx) => {
+	var filePath = ctx.req.file.path;//获取文件本地路径
+	var filename = ctx.req.file.filename;//获取文件原名
+	var token = uptoken(bucket, filename);//转化token
+	var extra = new qiniu.io.PutExtra();
 	await ctx.Promise((resolve,reject)=>{
-    	resolve({  
-    		msg:"上传成功",
-    		key:filename,
-    		url:settings.ROOTPATH + filename 
-		})      
+		qiniu.io.putFile(token, filename, filePath, extra, function(err, ret) {
+	        fs.unlinkSync(filePath);
+	      	if(!err) {
+	        	resolve({  
+	        		msg:"上传成功",
+	        		hash:ret.hash,
+	        		key:ret.key,
+	        		url:settings.ROOTPATH + ret.key 
+				})      
+	     	} else {
+	 			reject({
+	 				msg:"上传失败",
+        			errmsg:err  
+	 			})
+	      	}
+		});
 	})   
 };
 
