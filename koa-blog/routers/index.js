@@ -9,6 +9,7 @@ router.get('/', pageController.getAll)
 .get('/sub/:id',pageController.getSub).get('/sub/:id/p/:index', pageController.getSub)
 .get('/article/:id.html',pageController.getOne)
 .get('/article/:id',pageController.getOneById)
+.get('/2-14', pageController.getLove)
 .get('/404', async ( ctx )=>{
 	await ctx.render('404', {
     	title:"你访问的页面找不回来了"

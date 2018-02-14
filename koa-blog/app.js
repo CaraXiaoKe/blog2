@@ -18,7 +18,9 @@ const ResponseHandle = require('./middlewares/resultCapture');
 const moment = require('moment');
 //服务器异常 捕获
 app.use(async(ctx,next)=>{
+	ctx.state.isFirst = false;
 	if(ctx.request.url==='/'&&!ctx.cookies.get('tag')){
+		ctx.state.isFirst = true;
 		ctx.cookies.set('tag', true, {
 			path:'/'
 		});

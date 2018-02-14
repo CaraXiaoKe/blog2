@@ -291,3 +291,8 @@ exports.getOneById = async (ctx) => {
     	main:false
   	})	
 }
+exports.getLove = async ( ctx ) => {
+  	await ctx.render('2-14', {
+    	
+  	})
+}
