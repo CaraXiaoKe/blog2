@@ -1,12 +1,6 @@
 # robots.txt generated at http://tool.chinaz.com/robots/ 
 User-agent: *
-Allow:  /article/*.html$
-Allow:  /p/
-Allow:  /date/
-Allow:  /sub/
-Allow:  /cate/
 Disallow: /images/
 Disallow: /styles/
 Disallow: /uploads/
-Disallow:  /
 Sitemap: https://92node.com/sitemap.xml
