@@ -56,7 +56,7 @@ app.use(views(path.join(__dirname, './views'), {
   	extension: 'ejs',
   	options:{
   		config_cate:cate,
-  		__URL:process.env.NODE_ENV === 'development' ? 'http://localhost:3000':'https://92node.com' 
+  		__URL:process.env.NODE_ENV === 'development' ? 'http://localhost:3000':'http://92node.com' 
   	}
 }))
 
